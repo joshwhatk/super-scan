@@ -79,7 +79,7 @@ if ($baseline_results)
 	//	Get the count of baseline records
 	$count_baseline = count($baseline);
 
-	if (0 == $count_baseline)
+	if ($count_baseline == 0)
 	//	Prior scanned results but empty baseline table
 	{
 		//	Check for database hack by checking $firstscan
