@@ -3,9 +3,9 @@
 namespace Joshwhatk\SuperScan;
 
 /**
- * Part of the Superscan package.
+ * Part of the SuperScan package.
  *
- * @package    Superscan
+ * @package    SuperScan
  * @version    0.0.1
  * @author     joshwhatk
  * @license    MIT
@@ -14,7 +14,7 @@ namespace Joshwhatk\SuperScan;
 
 use Illuminate\Support\ServiceProvider;
 
-class SuperscanServiceProvider extends ServiceProvider
+class SuperScanServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.

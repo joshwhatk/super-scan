@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Part of the Superscan package.
+ * Part of the SuperScan package.
  *
- * @package    Superscan
+ * @package    SuperScan
  * @version    0.0.1
  * @author     joshwhatk
  * @license    MIT
@@ -13,7 +13,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class MigrationJoshwhatkSuperscan extends Migration
+class MigrationJoshwhatkSuperScan extends Migration
 {
     /**
      * Run the migrations.

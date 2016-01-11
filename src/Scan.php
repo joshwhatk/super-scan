@@ -3,9 +3,9 @@
 namespace Joshwhatk\SuperScan;
 
 /**
- * Part of the Superscan package.
+ * Part of the SuperScan package.
  *
- * @package    Superscan
+ * @package    SuperScan
  * @version    0.0.1
  * @author     joshwhatk
  * @license    MIT
