@@ -10,6 +10,11 @@
         "laracasts/integrated": "^0.15.6",
         "laracasts/testdummy": "^2.3"
     },
+    "autoload": {
+        "psr-4": {
+            "Joshwhatk\\Superscan\\": "src"
+        }
+    },
     "license": "MIT",
     "authors": [
         {
