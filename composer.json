@@ -2,6 +2,7 @@
     "name": "joshwhatk/super-scan",
     "description": "Simple File Change Manager",
     "require": {
+        "php": ">=5.5.0",
         "illuminate/support": "^5.2"
     },
     "require-dev": {
