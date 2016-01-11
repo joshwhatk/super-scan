@@ -26,7 +26,7 @@ class MigrationJoshwhatkSuperScan extends Migration
         {
             $table->increments('id');
             $table->string('name');
-            foreach(config('superscan::account_information.relations') as $relation)
+            foreach(config('joshwhatk.super_scan.account_information.relations') as $relation)
             {
                 $relation = $this->convertRelation($relation);
                 $table->integer($relation.'_id')->unsiged()->index();

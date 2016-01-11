@@ -30,7 +30,10 @@ class SuperScanServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/../config/joshwhatk.super_scan.php' => config_path('joshwhatk.super_scan.php'),
+            __DIR__.'/../database/migrations/' => database_path('migrations')
+        ]);
     }
 
     /**
