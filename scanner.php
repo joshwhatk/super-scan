@@ -2,12 +2,12 @@
 
 //	INTRO
 //
-//	Introductory comments and overview are provided in the ReadMe.md file
+//	Introductory comments are provided in the ReadMe.txt file
 //
 //	End of Intro
 
 //	CONFIGURE account for scan
-require('configure.php');
+require('configure_DK.php');
 
 //	INITIALIZE
 //	Initialization of scanner variables and tables
@@ -30,10 +30,9 @@ $altered = array();
 $deleted = array();	
 
 //	Limit first scan entries in history table
-$firstscan_rec = false;
 
 //	Get date and time of last scan for report
-$last_scanned_records = @mysqli_query($scandb, "SELECT scanned FROM scanned WHERE acct = '$acct' ORDER BY scanned DESC LIMIT 1");
+$last_scanned_records = @mysqli_query($scandb, "SELECT `scanned` FROM scanned WHERE `acct` = '$acct' ORDER BY `scanned` DESC LIMIT 1");
 if ($last_scanned_records && 0 < mysqli_num_rows($last_scanned_records))
 {
 	//	Get last timestamp
@@ -57,7 +56,7 @@ $start = microtime(true);
 // 	Read from database to obtain file paths, hash values and 
 //		last modified dates to compare against current files
 
-$baseline_results = @mysqli_query($scandb,"SELECT file_path, file_hash, file_last_mod FROM baseline WHERE acct = '$acct'");
+$baseline_results = @mysqli_query($scandb,"SELECT `file_path`, `file_hash`, `file_last_mod` FROM baseline WHERE `acct` = '$acct' ORDER BY `file_path` ASC");
 
 if ($baseline_results) 
 {
@@ -69,28 +68,31 @@ if ($baseline_results)
 	}
 
 	//	Output baseline array for testing
-	if ($testing)
+	/* if ($testing)
 	{
 		echo "<h2>SuperScan Test</h2>";
-		echo "<pre>Baseline array (database files):<br>";
+		echo "<pre>Baseline array (database files):<br />";
 		print_r($baseline);
-		echo "</pre><br>";
-	}
+		echo "</pre><br />";
+	} */
 
 	//	Get the count of baseline records
 	$count_baseline = count($baseline);
 
 	if (0 == $count_baseline) 
+	//	Prior scanned results but empty baseline table
 	{
 		//	Check for database hack by checking $firstscan
 		if (!$firstscan)
 		{
-			$report .= "Empty baseline table!\n\rPROBABLE HACK ATTACK\n\r(ALL files are missing/deleted)!\n\r\n\r";	
+			$report .= "Empty baseline table!\r\nPROBABLE HACK ATTACK\r\n(ALL files are missing/deleted)!\r\n\r\n";	
 		}
 	}
 	
+	$report .= "$count_baseline baseline files extracted from database.\r\n";
+	
 	//	Output number of baseline files for testing
-	$report .= "$count_baseline baseline files extracted from database.\n\r";
+	if ($testing) echo "<p>$count_baseline baseline files extracted from database.</p>";
 }
 //	Baseline files read into baseline array and baseline_count made
 
@@ -102,12 +104,28 @@ $dir = new RecursiveDirectoryIterator(SCAN_PATH);
 $iter = new RecursiveIteratorIterator($dir);
 while ($iter->valid())
 {
-	// 	Not in Dot AND avoid banned directories
+	// 	Not in Dot AND not in $skip (prohibited) directories
 	if (!$iter->isDot() && !(in_array($iter->getSubPath(), $skip)))
 	{
-		//	Select file extensions OR
-		//	$ext empty AND not excluded ext
-		if ((!empty($ext)) || (empty($ext) && !in_array(pathinfo($iter->key(), PATHINFO_EXTENSION), $excl_ext, true)))
+		//	Get or set file extension ('' vs null)
+		if (is_null(pathinfo($iter->key(), PATHINFO_EXTENSION)))
+		{
+			$ext = '';
+		} else {
+			$ext = strtolower(pathinfo($iter->key(), PATHINFO_EXTENSION));
+		}
+
+		//	Check for allowed file extension OR
+		//	$ext empty AND not excluded ext OR
+		//	is not $extensionless (if prohibited)
+		//	if ((!empty($ext_array)) || (empty($ext_array) && !in_array($ext, $excl_array, true)))
+		if (
+			(in_array($ext, $ext_array, true)) ||	
+			// in allowed extension array
+			(empty($ext_array) && !in_array($ext, $excl_array, true)) ||	
+			// OR NOT in excluded extension array
+			(empty($ext) && $extensionless) )	
+			// OR extensionless AND extensionless is allowed
 		{
 			$file_path = $iter->key();
 			//	Ensure $file_path without \'s
@@ -116,30 +134,26 @@ while ($iter->valid())
 			//	Handle addition to $current array
 			$current[$file_path] = array('file_hash' => hash_file("sha1", $file_path), 'file_last_mod' => date("Y-m-d H:i:s", filemtime($file_path)));
 
-			//	IF new, file was ADDED
+			//	IF file_path is not in baseline, file was ADDED
 			if (!array_key_exists($file_path, $baseline))
 			{
 				$added[$file_path] = array('file_hash' => $current[$file_path]['file_hash'], 'file_last_mod' => $current[$file_path]['file_last_mod']);
 			
 				//	INSERT added record in baseline table
-				@mysqli_query($scandb, "INSERT INTO baseline SET file_path = '$file_path', file_hash = '" . $added[$file_path]['file_hash'] . "', file_last_mod = '" . $added[$file_path]['file_last_mod'] . "', acct = '$acct'");
+				@mysqli_query($scandb, "INSERT INTO baseline SET `file_path` = '$file_path', `file_hash` = '" . $added[$file_path]['file_hash'] . "', `file_last_mod` = '" . $added[$file_path]['file_last_mod'] . "', `acct` = '$acct'");
 				if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 
 				//	INSERT added file record in history table
 				//		EXCEPT if $firstscan (to prevent unnecessary records)
 				if(!$firstscan) 
 				{
-					@mysqli_query($scandb, "INSERT INTO history SET stamp = '" . date('Y-m-d h:i:s') . "', status = 'Added', file_path = '$file_path', hash_org = 'Not Applicable', hash_new = '" . $added[$file_path]['file_hash'] . "', file_last_mod = '" . $added[$file_path]['file_last_mod'] . "', acct = '$acct'");
+					@mysqli_query($scandb, "INSERT INTO history SET `stamp` = '" . date('Y-m-d h:i:s') . "', `status` = 'Added', `file_path` = '$file_path', `hash_org` = 'Not Applicable', `hash_new` = '" . $added[$file_path]['file_hash'] . "', `file_last_mod` = '" . $added[$file_path]['file_last_mod'] . "', `acct` = '$acct'");
 					if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 				}  else {
-					if (!$firstscan_rec)
-					{
-						//	First Scan entry into history table
- 						@mysqli_query($scandb, "INSERT INTO history SET stamp = '" . date('Y-m-d h:i:s') . "', status = 'Added', file_path = 'FIRST SCAN (file listings inhibited)', hash_org = 'Not Applicable', hash_new = 'Not Applicable', file_last_mod = 'Not Applicable', acct = '$acct'");
-						$firstscan_rec = true;
-						if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
-					}
-				}
+					//	First Scan entry into history table
+ 					@mysqli_query($scandb, "INSERT INTO history SET `stamp` = '" . date('Y-m-d h:i:s') . "', `status` = 'Added', `file_path` = 'FIRST SCAN (file listings inhibited)', `hash_org` = 'Not Applicable', `hash_new` = 'Not Applicable', `file_last_mod` = 'Not Applicable', `acct` = '$acct'");
+					if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
+				}	//	End of handling $added array entry
 
 			} else {
 
@@ -149,15 +163,15 @@ while ($iter->valid())
 					$altered[$file_path] = array('hash_org' => $baseline[$file_path]['file_hash'], 'hash_new' => $current[$file_path]['file_hash'], 'file_last_mod' => $current[$file_path]['file_last_mod']);
 				
 					//	UPDATE altered record in baseline
-					@mysqli_query($scandb,"UPDATE baseline SET file_hash = '" . $altered[$file_path]['hash_new'] . "', file_last_mod = '" . $altered[$file_path]['file_last_mod'] . "' WHERE file_path = '$file_path' AND acct = '$acct'");
+					@mysqli_query($scandb,"UPDATE baseline SET `file_hash` = '" . $altered[$file_path]['hash_new'] . "', `file_last_mod` = '" . $altered[$file_path]['file_last_mod'] . "' WHERE `file_path` = '$file_path' AND `acct` = '$acct'");
 					if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 
 					//	INSERT altered file info in history table
-					@mysqli_query($scandb,"INSERT INTO history SET stamp = '" . date('Y-m-d h:i:s') . "', status = 'Altered', file_path = '$file_path', hash_org = '" . $altered[$file_path]['hash_org'] . "', hash_new = '" . $altered[$file_path]['hash_new'] . "', file_last_mod = '" . $altered[$file_path]['file_last_mod'] . "', acct = '$acct'");
+					@mysqli_query($scandb,"INSERT INTO history SET `stamp` = '" . date('Y-m-d h:i:s') . "', `status` = 'Altered', `file_path` = '$file_path', `hash_org` = '" . $altered[$file_path]['hash_org'] . "', `hash_new` = '" . $altered[$file_path]['hash_new'] . "', `file_last_mod` = '" . $altered[$file_path]['file_last_mod'] . "', `acct` = '$acct'");
 					if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 				}
 			}
-		}	//	End of handling $altered
+		}	//	End of handling $altered array entry
 	}	// End of handling $current record entry
 	$iter->next();
 }
@@ -174,7 +188,7 @@ foreach($deleted as $key => $value)
 {
 	//	Handle DELETEd file
 	//	DELETE file from baseline table
-	mysqli_query($scandb,"DELETE FROM baseline WHERE file_path = '$key' LIMIT 1");
+	mysqli_query($scandb,"DELETE FROM baseline WHERE `file_path` = '$key' LIMIT 1");
 	if ($testing && mysqli_error($scandb)) 
 	{
 		echo mysqli_error($scandb);
@@ -183,35 +197,43 @@ foreach($deleted as $key => $value)
 	}
 
 	//	Record deletion in history table
-	@mysqli_query($scandb, "INSERT INTO history SET stamp = '" . date('Y-m-d h:i:s') . "', status = 'Deleted', file_path = '$key', hash_org = '" . $deleted[$key]['file_hash'] . "', hash_new = 'Not Applicable', file_last_mod = '" . $deleted[$key]['file_last_mod'] . "', acct = '$acct'");
+	@mysqli_query($scandb, "INSERT INTO history SET `stamp` = '" . date('Y-m-d h:i:s') . "', `status` = 'Deleted', `file_path` = '$key', `hash_org` = '" . $deleted[$key]['file_hash'] . "', `hash_new` = 'Not Applicable', `file_last_mod` = '" . $deleted[$key]['file_last_mod'] . "', `acct` = '$acct'");
 	if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 }
 //	End of Deleted file handling
 
 
-//	PREPARE Report
+//	PREPARE Report 
 	
 //	Get scan duration
 $elapsed = round(microtime(true) - $start, 5);
 	
 //	Add count summary to report
 $count_current = count($current);
-$report .= "$count_current files collected in scan.\n\r";
+$report .= "$count_current files collected in scan.\r\n";
 if (0 == $count_current)
 {
 	//	ALL files are gone!
-	$report .= "\n\rThere are NO files in the specified location.\n\r";
-	if (!$firstscan) $report .= "This indicates a possible HACK ATTACK\n\rOR an incorrect path to the account's files\n\r\n\r";
+	$report .= "\r\nThere are NO files in the specified location.\r\n";
+	if (!$firstscan) $report .= "This indicates a possible HACK ATTACK\r\nOR an incorrect path to the account's files\r\n";
 }
 
 $count_added = count($added);
-$report .= "$count_added files ADDED to baseline.\n\r";
+$report .= "$indent $count_added files ADDED to baseline.\r\n";
+if (!$firstscan)
+{
+	foreach($added as $filename => $value) $report .= "$indent2 + " . substr($filename,$scan_path_length) . "\r\n";
+}
 
 $count_altered = count($altered);
-$report .= "$count_altered ALTERED files updated.\n\r";
+$report .= "$indent $count_altered ALTERED files updated.\r\n";
+foreach($altered as $filename => $value) $report .= "$indent2 " . chr(177) . " " . substr($filename,$scan_path_length) . "\r\n";
 
 $count_deleted = count($deleted);
-$report .= "$count_deleted files DELETED from baseline.\n\r\n\r";
+$report .= "$indent $count_deleted files DELETED from baseline.\r\n";
+foreach($deleted as $filename => $value) $report .= "$indent2 - " . substr($filename,$scan_path_length) . "\r\n";
+
+echo "\r\n";
 
 $count_changes = $count_added + $count_altered + $count_deleted;
 	
@@ -219,34 +241,40 @@ $count_changes = $count_added + $count_altered + $count_deleted;
 
 if (0 == $count_changes)
 {  
-    $path = "File structure is unchanged since last scan, script execution time $elapsed seconds.<br>The baseline contains $count_current files.";
+    $path = "File structure is unchanged since last scan, script execution time $elapsed seconds.<br>The baseline contains $count_current files.\r\n";
 
 	//	Update history table
-	@mysqli_query($scandb,"INSERT INTO history SET stamp = '" . date('Y-m-d h:i:s') . "', status = 'Unchanged', file_path = '$path', hash_org = 'Not Applicable', hash_new = 'Not Applicable', file_last_mod = 'Not Applicable', acct = '$acct'");
+	@mysqli_query($scandb,"INSERT INTO history SET `stamp` = '" . date('Y-m-d h:i:s') . "', `status` = 'Unchanged', `file_path` = '$path', `hash_org` = 'Not Applicable', `hash_new` = 'Not Applicable', `file_last_mod` = 'Not Applicable', `acct` = '$acct'");
 	if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 
 	// update scanned table
-	@mysqli_query($scandb,"INSERT INTO scanned SET scanned = '" . date('Y-m-d h:i:s') . "', changes = '$count_changes', acct = '$acct'");  
+	@mysqli_query($scandb,"INSERT INTO scanned SET `scanned` = '" . date('Y-m-d h:i:s') . "', `changes` = '$count_changes', `acct` = '$acct'");  
 	if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 
-	$report .= "File structure is unchanged since last scan.\n\rThe baseline contains $count_current files.\n\rScan executed in $elapsed seconds.";
+	$report .= "File structure is unchanged since last scan.\r\n\r\nThe baseline now contains $count_current files.\r\n\r\nScan executed in $elapsed seconds.";
 	
 } else {
 	
-	@mysqli_query($scandb,"INSERT INTO scanned SET scanned = '" . date('Y-m-d h:i:s') . "', changes = '$count_changes', acct = '$acct'");  
+	@mysqli_query($scandb,"INSERT INTO scanned SET `scanned` = '" . date('Y-m-d h:i:s') . "', `changes` = '$count_changes', `acct` = '$acct'");  
 	if ($testing && mysqli_error($scandb)) echo mysqli_error($scandb);
 
-	$report .= "Summary:\n\rBaseline start: $count_baseline\n\rCurrent Baseline: $count_current\n\rChanges to baseline: $count_changes\n\r\n\rAdded: $count_added\n\rAltered: $count_altered\n\rDeleted: $count_deleted.\n\r\n\rScan executed in $elapsed seconds.";
-	if (0 < $count_changes) $report .= "\n\r\n\rIf you did not makes these changes, examine your files closely\n\rfor evidence of embedded hacker code or added hacker files.\n\r(WinMerge provides excellent comparisons)";
-
+	$report .= "\r\n\r\nSummary:\r\n
+Baseline start: $count_baseline
+Current Baseline: $count_current
+Changes to baseline: $count_changes\r\n
+$indent Added: $count_added
+$indent Altered: $count_altered
+$indent Deleted: $count_deleted.\r\n
+Scan executed in $elapsed seconds.";
+	if (0 < $count_changes) $report .= "\r\n\r\nIf you did not makes these changes, examine your files closely\r\nfor evidence of embedded hacker code or added hacker files.\r\n(WinMerge provides excellent comparisons)";
 }
 
 //	Clean-up history table and scanned table by deleting entries over 30 days old
-@mysqli_query($scandb,"DELETE FROM history WHERE stamp < DATE_SUB(NOW(), INTERVAL 30 DAY)");
-if ($testing && mysqli_error($scandb)) echo "History table clean-up problem: " . mysqli_error($scandb) . "<br>";
+@mysqli_query($scandb,"DELETE FROM history WHERE `stamp` < DATE_SUB(NOW(), INTERVAL 30 DAY)");
+if ($testing && mysqli_error($scandb)) echo "History table clean-up problem: " . mysqli_error($scandb) . "<br />";
 
-@mysqli_query($scandb,"DELETE FROM scanned WHERE scanned < DATE_SUB(NOW(), INTERVAL 30 DAY)");
-if ($testing && mysqli_error($scandb)) echo "Scanned table clean-up problem: " . mysqli_error($scandb) . "<br>";
+@mysqli_query($scandb,"DELETE FROM scanned WHERE `scanned` < DATE_SUB(NOW(), INTERVAL 30 DAY)");
+if ($testing && mysqli_error($scandb)) echo "Scanned table clean-up problem: " . mysqli_error($scandb) . "<br />";
 
 //	End of Report preparation and clean-up
 
@@ -261,16 +289,19 @@ if ($email_out && 0 < $count_changes)
 	} else {
 		$to = $addresses[0];
 	}
-	mail($to, "SuperScan Report for $acct",$report); 
+	mail($to, "SuperScan Report for $acct",str_replace('&nbsp;',' ',$report)); 
 }
 
-//	Send report to monitor (for testing only -- REMOVE for CRON)
-//	if ($report_out) echo nl2br($report);
+//	Output Report for testing
+if ($testing || $report_out)
+{
+	echo str_replace(array("\r\n", "\r", "\n"), "<br />", $report); 
+}
 
-//	Destroy tables (release to memory
+//	Destroy tables (release to memory)
 $baseline = $current = $added = $altered = $deleted = array();
 
-//	Close database access
+//	Close database
 @mysqli_close($scandb);
 
 ?>
