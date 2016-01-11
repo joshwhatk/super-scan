@@ -1,6 +1,6 @@
 {
     "name": "joshwhatk/super-scan",
-    "description": "Simple File Change Manager",
+    "description": "Simple file change detection",
     "require": {
         "php": ">=5.5.9",
         "illuminate/support": "^5.2"
