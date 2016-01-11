@@ -35,7 +35,7 @@ class MigrationJoshwhatkSuperScan extends Migration
             $table->engine = 'InnoDB';
         });
 
-        Schema::create('baseline', function (Blueprint $table) {
+        Schema::create('baseline_files', function (Blueprint $table) {
             $table->string('file_path', 200);
             $table->char('file_hash', 40);
             $table->char('file_last_modified', 19)->nullable();
@@ -49,7 +49,8 @@ class MigrationJoshwhatkSuperScan extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('history', function (Blueprint $table) {
+        Schema::create('history_records', function (Blueprint $table) {
+            $table->increments('id');
             $table->char('stamp', 19)->nullable();
             $table->string('status', 10);
             $table->string('file_path', 200);
@@ -65,7 +66,7 @@ class MigrationJoshwhatkSuperScan extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('scanned', function (Blueprint $table) {
+        Schema::create('scanned_files', function (Blueprint $table) {
             $table->char('scanned', 19)->primary();
             $table->integer('changes', 11)->default(0);
             $table->integer('account_id')->unsigned();
