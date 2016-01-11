@@ -29,8 +29,10 @@ class MigrationJoshwhatkSuperscan extends Migration
             foreach(config('superscan::account_information.relations') as $relation)
             {
                 $relation = $this->convertRelation($relation);
-                $table->integer($relation.'_id')->unsiged();
+                $table->integer($relation.'_id')->unsiged()->index();
             }
+
+            $table->engine = 'InnoDB';
         });
 
         Schema::create('baseline', function (Blueprint $table) {
@@ -40,73 +42,40 @@ class MigrationJoshwhatkSuperscan extends Migration
             $table->integer('account_id')->nullable()->unsigned();
             $table->timestamps();
 
+            $table->engine = 'InnoDB';
+
             $table->primary('file_path');
-
-            $table->engine = 'InnoDB';
+            $table->foreign('account_id')->references('id')->on('accounts')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('persistences', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('code');
+        Schema::create('history', function (Blueprint $table) {
+            $table->char('stamp', 19)->nullable();
+            $table->string('status', 10);
+            $table->string('file_path', 200);
+            $table->string('hash_org', 40)->nullable()->default(null);
+            $table->string('hash_new', 40)->nullable()->default(null);
+            $table->char('file_last_modified', 19)->nullable();
+            $table->integer('account_id')->unsigned();
             $table->timestamps();
 
             $table->engine = 'InnoDB';
-            $table->unique('code');
+
+            $table->foreign('account_id')->references('id')->on('accounts')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('reminders', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('code');
-            $table->boolean('completed')->default(0);
-            $table->timestamp('completed_at')->nullable();
-            $table->timestamps();
-        });
+        Schema::create('scanned', function (Blueprint $table) {
+            $table->char('scanned', 19)->primary();
+            $table->integer('changes', 11)->default(0);
+            $table->integer('account_id')->unsigned();
 
-        Schema::create('roles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('slug');
-            $table->string('name');
-            $table->text('permissions')->nullable();
             $table->timestamps();
 
             $table->engine = 'InnoDB';
-            $table->unique('slug');
-        });
 
-        Schema::create('role_users', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
-            $table->integer('role_id')->unsigned();
-            $table->nullableTimestamps();
-
-            $table->engine = 'InnoDB';
-            $table->primary(['user_id', 'role_id']);
-        });
-
-        Schema::create('throttle', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->string('type');
-            $table->string('ip')->nullable();
-            $table->timestamps();
-
-            $table->engine = 'InnoDB';
-            $table->index('user_id');
-        });
-
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('email')->unique();
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->text('permissions')->nullable();
-            $table->timestamp('last_login')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->timestamps();
-
-            $table->engine = 'InnoDB';
+            $table->foreign('account_id')->references('id')->on('accounts')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -117,13 +86,10 @@ class MigrationJoshwhatkSuperscan extends Migration
      */
     public function down()
     {
-        Schema::drop('activations');
-        Schema::drop('persistences');
-        Schema::drop('reminders');
-        Schema::drop('roles');
-        Schema::drop('role_users');
-        Schema::drop('throttle');
-        Schema::drop('users');
+        Schema::drop('scanned');
+        Schema::drop('history');
+        Schema::drop('baseline');
+        Schema::drop('accounts');
     }
 
 
