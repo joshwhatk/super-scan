@@ -14,10 +14,12 @@ namespace Joshwhatk\SuperScan;
 
 use \Log;
 use \Carbon\Carbon;
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Joshwhatk\SuperScan\Support\File;
 use Joshwhatk\SuperScan\Database\Account;
 use Joshwhatk\SuperScan\Database\ScannedFile;
+use Joshwhatk\SuperScan\Database\HistoryRecord;
 
 class Scan
 {
@@ -157,6 +159,8 @@ class Scan
         $scan->initialize();
         $scan->determineBaseline();
         $scan->scanDirectory();
+        $scan->handleDeletedFiles();
+        $scan->complete();
     }
 
     private function initialize()
@@ -173,8 +177,11 @@ class Scan
 
     private function determineBaseline()
     {
-        $this->baseline = BaselineFile::account($this->account)
+        $baselines = BaselineFile::account($this->account)
             ->orderBy('file_path', 'asc')->get();
+
+        //-- convert to File::class
+        $this->baseline = $baselines->toFiles($baselines);
 
         if ($this->baseline->isEmpty() && !$this->first_scan) {
             $this->alert(
@@ -190,27 +197,146 @@ class Scan
         $recursive_directory_iterator = new RecursiveDirectoryIterator($this->directory);
         $this->iterator = new RecursiveIteratorIterator($recursive_directory_iterator);
 
-        $this->checkDirectoriesAndFiles();
+        while($this->iterator->valid())
+        {
+            $this->checkDirectoriesAndFiles();
+        }
+    }
+
+    private function handleDeletedFiles()
+    {
+        $this->deleted = $this->getDeletedFiles();
+
+        foreach ($this->deleted as $file_path => $file) {
+            //-- delete file from baseline table
+            $baseline = BaselineFile::where('path', $file_path)->account($this->account)->first();
+            $baseline->delete();
+
+            $this->saveDeletedFileToHistory($file_path);
+        }
+    }
+
+    private function complete()
+    {
+        $this->timestamps['completed'] = new Carbon;
+    }
+
+    protected function saveDeletedFileToHistory($file_path)
+    {
+        $historyRecord = new HistoryRecord;
+
+        $historyRecord->fill([
+            'status' => 'Deleted',
+            'path' => $file_path,
+            'baseline_hash' => $this->deleted[$file_path]['hash'],
+            'last_modified' => $this->deleted[$file_path]['last_modified'],
+            'account_id' => $this->account->id,
+        ]);
+
+        $historyRecord->save();
+    }
+
+    protected function getDeletedFiles()
+    {
+        return $this->baseline->diff($this->current);
     }
 
     protected function checkDirectoriesAndFiles()
     {
-        while($this->iterator->valid())
+        //  Not in Dot AND not in $skip (prohibited) directories
+        if(! $this->directoryIsSkippable())
         {
-            //  Not in Dot AND not in $skip (prohibited) directories
-            if(! $this->directoryIsSkippable())
+            //  Get or set file extension ('' vs null)
+            $extension = $this->setFileExtension();
+
+            if($this->extensionIsAllowed($extension))
             {
-                //  Get or set file extension ('' vs null)
-                $extension = $this->setFileExtension();
+                $file_path = $this->cleanPath($iterator->key());
 
-                if($this->extensionIsAllowed($extension))
-                {
-                    $file_path = $this->cleanPath($iterator->key());
+                //-- add current file
+                $this->current->push([$file_path => new File($file_path)]);
 
-                    //
-                }
+                //-- if the file was added
+                $this->handleNewFile($file_path);
+
+                //-- if the file was altered
+                $this->handleAlteredFile($file_path);
             }
         }
+        $this->iterator->next();
+    }
+
+    protected function handleNewFile($file_path)
+    {
+        //-- it is added if baseline doesn't contain the $file_path
+        if(! $this->baseline->contains($file_path))
+        {
+            $this->added->push([
+                $file_path => $this->current[$file_path]
+            ]);
+
+            //-- insert added file into baseline table
+            BaselineFile::createFromFile($this->current[$file_path], $this->account);
+
+            if(! $this->first_scan)
+            {
+                return $this->saveAddedFileToHistory($file_path);
+            }
+        }
+    }
+
+    protected function handleAlteredFile($file_path)
+    {
+        if($this->baseline->contains($file_path)
+           &&
+           ($this->baseline[$file_path]['hash'] != $this->current[$file_path]['hash']
+            ||
+            $this->baseline[$file_path]['last_modified'] != $this->current[$file_path]['last_modified'])
+        )
+        {
+            $this->altered->push([
+                $file_path => [$this->current[$file_path]]
+            ]);
+
+            //-- add the baseline_hash
+            $this->altered[$file_path]['baseline_hash'] = $this->baseline[$file_path]['hash'];
+
+            //-- update altered file in baseline table
+            BaselineFile::updateFromFile($this->current[$file_path], $this->account);
+
+            $this->saveAlteredFileToHistory($file_path);
+        }
+    }
+
+    protected function saveAlteredFileToHistory($file_path)
+    {
+        $historyRecord = new HistoryRecord;
+
+        $historyRecord->fill([
+            'status' => 'Altered',
+            'path' => $file_path,
+            'baseline_hash' => $this->altered[$file_path]['baseline_hash'],
+            'latest_hash' => $this->altered[$file_path]['hash'],
+            'last_modified' => $this->altered[$file_path]['last_modified'],
+            'account_id' => $this->account->id,
+        ]);
+
+        $historyRecord->save();
+    }
+
+    protected function saveAddedFileToHistory($file_path)
+    {
+        $historyRecord = new HistoryRecord;
+
+        $historyRecord->fill([
+            'status' => 'Added',
+            'path' => $file_path,
+            'latest_hash' => $this->added[$file_path]['hash'],
+            'last_modified' => $this->added[$file_path]['last_modified'],
+            'account_id' => $this->account->id,
+        ]);
+
+        $historyRecord->save();
     }
 
     protected function cleanPath($path)
