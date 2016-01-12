@@ -208,6 +208,7 @@ class Scan
     private function complete()
     {
         $this->timestamps['completed'] = new Carbon;
+        $this->dump();
     }
 
     protected function saveDeletedFileToHistory($file_path)
@@ -449,6 +450,17 @@ class Scan
     {
         if ($this->environment === 'local') {
             Log::info($message);
+        }
+    }
+
+    protected function dump()
+    {
+        if ($this->environment === 'local') {
+            $this->log(['current_files' => $this->current]);
+            $this->log(['baseline_files' => $this->baseline]);
+            $this->log(['added_files' => $this->added]);
+            $this->log(['altered_files' => $this->altered]);
+            $this->log(['deleted_files' => $this->deleted]);
         }
     }
 
