@@ -418,7 +418,7 @@ class Scan
         $this->exclusions['directories'] = collect($this->config['directories']);
 
         //-- add any excluded directories specific to this account
-        $account_exclusions = collect($account->getExcludedDirectories());
+        $account_exclusions = collect($this->account->getExcludedDirectories());
         if(! $account_exclusions->isEmpty())
         {
             $this->exclusions['directories']->merge($account_exclusions->all());
