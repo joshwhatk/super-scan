@@ -10,11 +10,6 @@ class Report
      */
     protected $scan;
 
-    public function __construct()
-    {
-        //
-    }
-
     public function addScan(Scan $scan)
     {
         $this->scan = $scan;
