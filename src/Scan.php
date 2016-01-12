@@ -6,7 +6,7 @@ namespace Joshwhatk\SuperScan;
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    0.0.3
+ * @version    0.0.4
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -16,8 +16,8 @@ use \Log;
 use \Carbon\Carbon;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Joshwhatk\SuperScan\Report;
 use Joshwhatk\SuperScan\Support\File;
-use Joshwhatk\SuperScan\Support\Report;
 use Joshwhatk\SuperScan\Database\ScannedFile;
 use Joshwhatk\SuperScan\Database\HistoryRecord;
 use Joshwhatk\SuperScan\Contracts\AccountInterface;
