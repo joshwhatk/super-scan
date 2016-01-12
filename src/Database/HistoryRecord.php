@@ -17,6 +17,8 @@ use Joshwhatk\SuperScan\Database\Account;
 
 class HistoryRecord extends Model
 {
+    protected $fillable = ['status', 'path', 'baseline_hash', 'latest_hash', 'last_modified', 'account_id'];
+
     public function scopeAccount($query, Account $account)
     {
         return $query->where('account_id', $account->id);
