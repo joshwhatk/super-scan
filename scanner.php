@@ -266,7 +266,7 @@ $indent Added: $count_added
 $indent Altered: $count_altered
 $indent Deleted: $count_deleted.\r\n
 Scan executed in $elapsed seconds.";
-	if (0 < $count_changes) $report .= "\r\n\r\nIf you did not makes these changes, examine your files closely\r\nfor evidence of embedded hacker code or added hacker files.\r\n(WinMerge provides excellent comparisons)";
+	if ($count_changes > 0) $report .= "\r\n\r\nIf you did not makes these changes, examine your files closely\r\nfor evidence of embedded hacker code or added hacker files.\r\n(WinMerge provides excellent comparisons)";
 }
 
 //	Clean-up history table and scanned table by deleting entries over 30 days old
