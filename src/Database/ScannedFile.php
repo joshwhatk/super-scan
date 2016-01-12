@@ -13,9 +13,12 @@
 namespace Joshwhatk\SuperScan\Database;
 
 use Illuminate\Database\Eloquent\Model;
-use Joshwhatk\SuperScan\Contracts\AccountInterface;
+use Joshwhatk\SuperScan\Database\Account;
 
-class Account extends Model implements AccountInterface
+class ScannedFile extends Model
 {
-    //
+    public function scopeAccount($query, Account $account)
+    {
+        return $query->where('account_id', $account->id);
+    }
 }

@@ -1,7 +1,7 @@
 # SuperScan
 Detect changed files using PHP/MySQL/CRON
 
-INTRODUCTION
+## Introduction
 
 This set of scripts is an evolution from what I offered as a SitePoint article and has evolved primarily through the suggestion of Han Wechgelaer who suggested that I extend the original "hashscan" to compare and record the changes in new database tables and offered a daily report of changes.
 
@@ -38,13 +38,15 @@ The coding assumes that scans will run under CRON every hour and the reporter sc
 
 The reporter script will report changes in the history table over the prior 24 hours. It is recommended that CRON NOT start the reporter script at the same minute as the scanner script (the offered CRON statements suggest a 10 minute delay on the last of the hourly executions).
 
-WORKING ARRAYS
+## Working Arrays
 - baseline is the array of path/filenames, file hashes, last modified date and time and the scan's account name
 - current is the array of CURRENT path/filenames as determined by the directory scan, file hashes and last modified date and time
 - the differences between baseline and current are sorted into arrays (added, altered and deleted) to facilitate baseline and history table updates and report generation.
 - ext is the array of file extensions to capture (empty is ALL and is recommended)
 - excl_ext is the array of file extensions to exclude (ext must be empty to exclude any file extensions)
 - skip is the array of directories to exclude
+
+___
 
 I STRONGLY recommend that your SuperScan files be located outside your webspace (at the same or higher level than public_html) to prevent access via a browser. Of course, I expect testing on your test server OR from within your webspace so minor alterations (e.g., SCAN_PATH's define statements) after testing will be necessary.
 

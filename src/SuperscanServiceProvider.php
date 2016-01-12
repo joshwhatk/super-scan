@@ -3,10 +3,10 @@
 namespace Joshwhatk\SuperScan;
 
 /**
- * Part of the Superscan package.
+ * Part of the SuperScan package.
  *
- * @package    Superscan
- * @version    0.0.1
+ * @package    SuperScan
+ * @version    0.0.2
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -14,7 +14,7 @@ namespace Joshwhatk\SuperScan;
 
 use Illuminate\Support\ServiceProvider;
 
-class SuperscanServiceProvider extends ServiceProvider
+class SuperScanServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -30,7 +30,10 @@ class SuperscanServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/../config/joshwhatk.super_scan.php' => config_path('joshwhatk.super_scan.php'),
+            __DIR__.'/../database/migrations/' => database_path('migrations')
+        ]);
     }
 
     /**

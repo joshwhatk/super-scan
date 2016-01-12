@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Part of the Superscan package.
+ * Part of the SuperScan package.
  *
- * @package    Superscan
- * @version    0.0.1
+ * @package    SuperScan
+ * @version    0.0.2
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -13,7 +13,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class MigrationJoshwhatkSuperscan extends Migration
+class MigrationJoshwhatkSuperScan extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class MigrationJoshwhatkSuperscan extends Migration
         {
             $table->increments('id');
             $table->string('name');
-            foreach(config('superscan::account_information.relations') as $relation)
+            foreach(config('joshwhatk.super_scan.account_information.relations') as $relation)
             {
                 $relation = $this->convertRelation($relation);
                 $table->integer($relation.'_id')->unsiged()->index();
@@ -35,27 +35,27 @@ class MigrationJoshwhatkSuperscan extends Migration
             $table->engine = 'InnoDB';
         });
 
-        Schema::create('baseline', function (Blueprint $table) {
-            $table->string('file_path', 200);
-            $table->char('file_hash', 40);
-            $table->char('file_last_modified', 19)->nullable();
+        Schema::create('baseline_files', function (Blueprint $table) {
+            $table->string('path', 200);
+            $table->char('hash', 40);
+            $table->char('last_modified', 19)->nullable();
             $table->integer('account_id')->nullable()->unsigned();
             $table->timestamps();
 
             $table->engine = 'InnoDB';
 
-            $table->primary('file_path');
+            $table->primary('path');
             $table->foreign('account_id')->references('id')->on('accounts')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('history', function (Blueprint $table) {
-            $table->char('stamp', 19)->nullable();
+        Schema::create('history_records', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('status', 10);
-            $table->string('file_path', 200);
-            $table->string('hash_org', 40)->nullable()->default(null);
-            $table->string('hash_new', 40)->nullable()->default(null);
-            $table->char('file_last_modified', 19)->nullable();
+            $table->string('path', 200);
+            $table->string('baseline_hash', 40)->nullable()->default(null);
+            $table->string('latest_hash', 40)->nullable()->default(null);
+            $table->char('last_modified', 19)->nullable();
             $table->integer('account_id')->unsigned();
             $table->timestamps();
 
@@ -65,8 +65,7 @@ class MigrationJoshwhatkSuperscan extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('scanned', function (Blueprint $table) {
-            $table->char('scanned', 19)->primary();
+        Schema::create('scans', function (Blueprint $table) {
             $table->integer('changes', 11)->default(0);
             $table->integer('account_id')->unsigned();
 
