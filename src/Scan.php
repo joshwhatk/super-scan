@@ -17,6 +17,7 @@ use \Carbon\Carbon;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Joshwhatk\SuperScan\Support\File;
+use Joshwhatk\SuperScan\Support\Report;
 use Joshwhatk\SuperScan\Database\Account;
 use Joshwhatk\SuperScan\Database\ScannedFile;
 use Joshwhatk\SuperScan\Database\HistoryRecord;
@@ -69,32 +70,20 @@ class Scan
     /**
      * The time that the scan was started.
      *
-     * @var \Carbon\Carbon
+     * @var array
      */
-    protected $start;
+    protected $timestamps = [];
 
     /**
-     * The last record from the previous scan.
+     * The Report to run for the current Scan
      *
-     * @var \Joshwhatk\Database\ScannedFile
+     * @var \Joshwhatk\SuperScan\Report
      */
-    protected $last_scanned_record;
-
-    /**
-     * The Collection which will hold all triggered reports.
-     *
-     * @var \Illuminate\Support\Collection
-     */
-    protected $reports;
-
-    /**
-     * The directory to be scanned.
-     * @var [type]
-     */
-    protected $directory;
+    protected $report;
 
     /**
      * A Collection of file paths and extensions to be excluded.
+     *
      * @var \Illuminate\Support\Collection
      */
     protected $exclusions = [
@@ -104,43 +93,42 @@ class Scan
 
     /**
      * A list of whitelisted extensions if the extensions are whitelisted.
+     *
      * @var null or \Illuminate\Support\Collection
      */
     protected $only_extensions = null;
 
     /**
      * The file iterator.
+     *
      * @var \RecursiveIteratorIterator
      */
     protected $iterator;
 
     /**
      * The default configuration for this package.
+     *
      * @var \Illuminate\Support\Collection
      */
     protected $config;
 
-    public function __construct(Account $account)
+    public function __construct(Account $account, Report $report)
     {
+        $this->report = $report;
         $this->environment = config('app.env');
         $this->createConfig(config('joshwhatk.super_scan'));
 
         $this->account = $account;
-        $this->directory = $account->getWebroot();
         $this->getExcludedExtensions();
         $this->getExcludedDirectories();
 
         //-- Initialize Arrays
         $this->baseline = collect([]);
         $this->current = collect([]);
+
         $this->added = collect([]);
         $this->altered = collect([]);
         $this->deleted = collect([]);
-        $this->reports = collect([
-            'alerts' => collect([]),
-            'messages' => collect([]),
-        ]);
-
     }
 
     protected function createConfig($config)
@@ -154,25 +142,28 @@ class Scan
 
     public static function run(Account $account)
     {
-        $scan = new static($account);
+        $scan = new static($account, new Report);
 
         $scan->initialize();
         $scan->determineBaseline();
         $scan->scanDirectory();
         $scan->handleDeletedFiles();
         $scan->complete();
+
+        $scan->report->addScan($scan);
+        $scan->report->report();
     }
 
     private function initialize()
     {
-        $this->getLastScanTime();
+        $last_scanned_record = $this->getLastScanTime();
 
-        if (is_null($this->last_scanned_record)) {
+        if (is_null($last_scanned_record)) {
             $this->first_scan = true;
         }
 
         //-- Set the start after the first database query has returned
-        $this->start = new Carbon;
+        $this->timestamps['started'] = new Carbon;
     }
 
     private function determineBaseline()
@@ -188,13 +179,11 @@ class Scan
                 "**Probable hack**  Empty baseline table!  (ALL baseline files are missing or deleted)!"
             );
         }
-        $baseline_count = $this->baseline->count();
-        $this->report($this->baseline->count()." baseline files extracted from database.  ");
     }
 
     private function scanDirectory()
     {
-        $recursive_directory_iterator = new RecursiveDirectoryIterator($this->directory);
+        $recursive_directory_iterator = new RecursiveDirectoryIterator($this->account->getWebroot());
         $this->iterator = new RecursiveIteratorIterator($recursive_directory_iterator);
 
         while($this->iterator->valid())
@@ -437,7 +426,7 @@ class Scan
 
     protected function getLastScanTime()
     {
-        $this->last_scanned_record = ScannedFile::account($this->account)
+        return ScannedFile::account($this->account)
             ->orderBy('created_at', 'desc')->limit(1)->get();
     }
 
@@ -465,12 +454,6 @@ class Scan
 
     protected function alert($message)
     {
-        $this->reports['alerts']->push($message);
-    }
-
-    protected function report($message)
-    {
-        $this->reports['messages']->push($message);
-        $this->log($message);
+        $this->report->alert($message);
     }
 }
