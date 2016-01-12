@@ -65,8 +65,7 @@ class MigrationJoshwhatkSuperScan extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('scanned_files', function (Blueprint $table) {
-            $table->char('scanned', 19)->primary();
+        Schema::create('scans', function (Blueprint $table) {
             $table->integer('changes', 11)->default(0);
             $table->integer('account_id')->unsigned();
 
