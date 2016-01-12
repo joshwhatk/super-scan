@@ -6,7 +6,7 @@ namespace Joshwhatk\SuperScan;
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    0.0.2
+ * @version    0.0.3
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -14,13 +14,13 @@ namespace Joshwhatk\SuperScan;
 
 use \Log;
 use \Carbon\Carbon;
-use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use Joshwhatk\SuperScan\Support\File;
 use Joshwhatk\SuperScan\Support\Report;
-use Joshwhatk\SuperScan\Database\Account;
 use Joshwhatk\SuperScan\Database\ScannedFile;
 use Joshwhatk\SuperScan\Database\HistoryRecord;
+use Joshwhatk\SuperScan\Contracts\AccountInterface;
 
 class Scan
 {
@@ -112,7 +112,7 @@ class Scan
      */
     protected $config;
 
-    public function __construct(Account $account, Report $report)
+    public function __construct(AccountInterface $account, Report $report)
     {
         $this->report = $report;
         $this->environment = config('app.env');
@@ -140,7 +140,7 @@ class Scan
         ]);
     }
 
-    public static function run(Account $account)
+    public static function run(AccountInterface $account)
     {
         $scan = new static($account, new Report);
 

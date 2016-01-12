@@ -4,7 +4,7 @@
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    0.0.2
+ * @version    0.0.3
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -14,14 +14,14 @@ namespace Joshwhatk\SuperScan\Database;
 
 use Joshwhatk\SuperScan\Support\File;
 use Illuminate\Database\Eloquent\Model;
-use Joshwhatk\SuperScan\Database\Account;
 use Illuminate\Database\Eloquent\Collection;
+use Joshwhatk\SuperScan\Contracts\AccountInterface;
 
 class BaselineFile extends Model
 {
     protected $fillable = ['path', 'hash', 'last_modified'];
 
-    public function scopeAccount($query, Account $account)
+    public function scopeAccount($query, AccountInterface $account)
     {
         return $query->where('account_id', $account->id);
     }
@@ -39,7 +39,7 @@ class BaselineFile extends Model
         return $files_collection;
     }
 
-    public static function createFromFile(File $file, Account $account)
+    public static function createFromFile(File $file, AccountInterface $account)
     {
         $baseline = new static;
         $baseline->fill($file->toArray($account));
@@ -48,7 +48,7 @@ class BaselineFile extends Model
         return $baseline;
     }
 
-    public static function updateFromFile(File $file, Account $account)
+    public static function updateFromFile(File $file, AccountInterface $account)
     {
         $baseline = static::where('path', $file->path)->account($account)->first();
         $baseline->fill($file->toArray());
