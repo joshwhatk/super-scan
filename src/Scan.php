@@ -173,7 +173,7 @@ class Scan
             ->orderBy('path', 'asc')->get();
 
         //-- convert to File::class
-        $this->baseline = $baselines->toFiles($baselines);
+        $this->baseline = BaselineFile::toFiles($baselines);
 
         if ($this->baseline->isEmpty() && !$this->first_scan) {
             $this->alert(

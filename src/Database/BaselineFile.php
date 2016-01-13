@@ -26,7 +26,7 @@ class BaselineFile extends Model
         return $query->where('account_id', $account->id);
     }
 
-    public function toFiles(Collection $baseline_files)
+    public static function toFiles(Collection $baseline_files)
     {
         $files_collection = collect([]);
 
