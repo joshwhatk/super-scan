@@ -30,4 +30,14 @@ class Report
         $baseline_count = $this->scan->baseline->count();
         $this->add($this->scan->baseline->count()." baseline files extracted from database.  ");
     }
+
+    public function add($message, $type = 'info')
+    {
+        //
+    }
+
+    public function alert($message)
+    {
+        $this->add($message, 'alert');
+    }
 }
