@@ -18,6 +18,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Joshwhatk\SuperScan\Report;
 use Joshwhatk\SuperScan\Support\File;
+use Joshwhatk\SuperScan\Support\FileHelper;
 use Joshwhatk\SuperScan\Database\BaselineFile;
 use Joshwhatk\SuperScan\Database\HistoryRecord;
 use Joshwhatk\SuperScan\Database\Scan as FilesScan;
@@ -186,8 +187,7 @@ class Scan
 
     private function scanDirectory()
     {
-        $recursive_directory_iterator = new RecursiveDirectoryIterator($this->account->getWebroot());
-        $this->iterator = new RecursiveIteratorIterator($recursive_directory_iterator);
+        $this->iterator = FileHelper::make()->allFiles($this->account->getWebroot())->exclude($this->exclusions['directories']);
 
         while($this->iterator->valid())
         {
