@@ -248,6 +248,8 @@ class Scan
             if($this->extensionIsAllowed($extension))
             {
                 $file_path = $this->cleanPath($this->current_file->getRealPath());
+                $this->log(['$this->current_file->getRealPath()' => $this->current_file->getRealPath()]);
+                $this->log(['$file_path' => $file_path]);
 
                 //-- add current file
                 $this->current->put($file_path, new File($file_path));
