@@ -170,7 +170,7 @@ class Scan
     private function determineBaseline()
     {
         $baselines = BaselineFile::account($this->account)
-            ->orderBy('file_path', 'asc')->get();
+            ->orderBy('path', 'asc')->get();
 
         //-- convert to File::class
         $this->baseline = $baselines->toFiles($baselines);
