@@ -25,7 +25,7 @@ class File implements ArrayAccess
 
         $this->path = $file;
         $this->hash = hash_file("sha1", $file);
-        $this->last_modified = new Carbon(filemtime($file));
+        $this->last_modified = Carbon::createFromFormat('U', filemtime($file));
 
         return $this;
     }
