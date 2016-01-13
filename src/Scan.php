@@ -18,9 +18,9 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Joshwhatk\SuperScan\Report;
 use Joshwhatk\SuperScan\Support\File;
-use Joshwhatk\SuperScan\Database\ScannedFile;
 use Joshwhatk\SuperScan\Database\HistoryRecord;
 use Joshwhatk\SuperScan\Contracts\AccountInterface;
+use Joshwhatk\SuperScan\Database\Scan as FilesScan;
 
 class Scan
 {
@@ -427,7 +427,7 @@ class Scan
 
     protected function getLastScanTime()
     {
-        return ScannedFile::account($this->account)
+        return FilesScan::account($this->account)
             ->orderBy('created_at', 'desc')->limit(1)->get();
     }
 
