@@ -189,7 +189,7 @@ class Scan
     {
         $this->iterator = FileHelper::make()
             ->allFiles($this->account->getWebroot())
-            ->exclude($this->exclusions['directories'])
+            ->exclude($this->exclusions['directories']->toArray())
             ->getIterator();
 
         while($this->iterator->valid())
