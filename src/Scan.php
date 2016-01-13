@@ -214,7 +214,17 @@ class Scan
     private function complete()
     {
         $this->timestamps['completed'] = new Carbon;
+        $this->save();
         $this->dump();
+    }
+
+    protected function save()
+    {
+        $count_of_changes = $this->added->count() + $this->altered->count() + $this->deleted->count();
+        $scan = new FilesScan;
+        $scan->changes = $count_of_changes;
+        $scan->account_id = $this->account->id;
+        $scan->save();
     }
 
     protected function saveDeletedFileToHistory($file_path)
