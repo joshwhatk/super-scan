@@ -134,9 +134,9 @@ class Scan
     protected function createConfig($config)
     {
         $this->config = collect([
-            'scan_extensionless' => $config['defaults.extensions.scan_extensionless'],
-            'extensions' => $config['defaults.extensions'],
-            'directories' => $config['defaults.directories.blacklist'],
+            'scan_extensionless' => $config['defaults']['extensions']['scan_extensionless'],
+            'extensions' => $config['defaults']['extensions'],
+            'directories' => $config['defaults']['directories']['blacklist'],
         ]);
     }
 
