@@ -101,11 +101,11 @@ class Scan
     protected $only_extensions = null;
 
     /**
-     * The file iterator.
+     * The current file.
      *
-     * @var \RecursiveIteratorIterator
+     * @var \SplFileInfo
      */
-    protected $iterator;
+    protected $current_file;
 
     /**
      * The default configuration for this package.
@@ -187,13 +187,13 @@ class Scan
 
     private function scanDirectory()
     {
-        $this->iterator = FileHelper::make()
-            ->allFiles($this->account->getWebroot())
-            ->exclude($this->exclusions['directories']->toArray())
-            ->getIterator();
+        //-- directory, excluded directories
+        $allFiles = FileHelper::make()
+            ->allFiles($this->account->getWebroot(), $this->exclusions['directories']->toArray(), true);
 
-        while($this->iterator->valid())
+        foreach($allFiles as $file)
         {
+            $this->current_file = $file;
             $this->checkDirectoriesAndFiles();
         }
     }
@@ -240,14 +240,14 @@ class Scan
     protected function checkDirectoriesAndFiles()
     {
         //  Not in Dot AND not in $skip (prohibited) directories
-        if(! $this->directoryIsSkippable())
-        {
+        // if(! $this->directoryIsSkippable())
+        // {
             //  Get or set file extension ('' vs null)
             $extension = $this->setFileExtension();
 
             if($this->extensionIsAllowed($extension))
             {
-                $file_path = $this->cleanPath($this->iterator->key());
+                $file_path = $this->cleanPath($this->current_file->getRealPath());
 
                 //-- add current file
                 $this->current->put($file_path, new File($file_path));
@@ -258,8 +258,7 @@ class Scan
                 //-- if the file was altered
                 $this->handleAlteredFile($file_path);
             }
-        }
-        $this->iterator->next();
+        // }
     }
 
     protected function handleNewFile($file_path)
@@ -435,24 +434,24 @@ class Scan
 
     protected function directoryIsSkippable()
     {
-        $this->log($this->exclusions['directories']);
-        $this->log($this->iterator->getSubPath());
-        $this->log($this->exclusions['directories']->contains($this->iterator->getSubPath()));
+        // $this->log($this->exclusions['directories']);
+        // $this->log($this->iterator->getPath());
+        // $this->log($this->exclusions['directories']->contains($this->iterator->getPath()));
 
-        $path = collect([$this->iterator->getSubPath() => true]);
-        $this->log($path->contains($this->exclusions['directories']));
+        // $path = collect([$this->iterator->getPath() => true]);
+        // $this->log($path->contains($this->exclusions['directories']));
 
-        return $this->iterator->isDot() || $path->contains($this->exclusions['directories']);
+        // return $this->iterator->isDot() || $path->contains($this->exclusions['directories']);
     }
 
     protected function setFileExtension()
     {
-        if (is_null(pathinfo($this->iterator->key(), PATHINFO_EXTENSION)))
+        if (is_null(pathinfo($this->current_file->getRealPath(), PATHINFO_EXTENSION)))
         {
             return '';
         }
 
-        return strtolower(pathinfo($this->iterator->key(), PATHINFO_EXTENSION));
+        return strtolower(pathinfo($this->current_file->getRealPath(), PATHINFO_EXTENSION));
     }
 
     protected function log($message)
