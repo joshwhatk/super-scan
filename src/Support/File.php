@@ -23,8 +23,8 @@ class File
         }
 
         $this->path = $file;
-        $this->hash = hash_file("sha1", $file_path);
-        $this->last_modified = new Carbon(filemtime($file_path));
+        $this->hash = hash_file("sha1", $file);
+        $this->last_modified = new Carbon(filemtime($file));
 
         return $this;
     }
