@@ -453,6 +453,7 @@ class Scan
     protected function log($message)
     {
         if ($this->environment === 'local') {
+            Log::info($message);
             debug($message);
         }
     }
