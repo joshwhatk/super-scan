@@ -187,7 +187,10 @@ class Scan
 
     private function scanDirectory()
     {
-        $this->iterator = FileHelper::make()->allFiles($this->account->getWebroot())->exclude($this->exclusions['directories']);
+        $this->iterator = FileHelper::make()
+            ->allFiles($this->account->getWebroot())
+            ->exclude($this->exclusions['directories'])
+            ->getIterator();
 
         while($this->iterator->valid())
         {
