@@ -31,9 +31,7 @@ class BaselineFile extends Model
         $files_collection = collect([]);
 
         foreach ($baseline_files as $baseline_file) {
-            $files_collection->push([
-                $baseline_file->file_path => new File($basline_file)
-            ]);
+            $files_collection->put($baseline_file->file_path, new File($baseline_file));
         }
 
         return $files_collection;
