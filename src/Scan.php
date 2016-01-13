@@ -436,7 +436,10 @@ class Scan
         $this->log($this->iterator->getSubPath());
         $this->log($this->exclusions['directories']->contains($this->iterator->getSubPath()));
 
-        return $this->iterator->isDot() || $this->exclusions['directories']->contains($this->iterator->getSubPath());
+        $path = collect([$this->iterator->getSubPath() => true]);
+        $this->log($path->contains($this->exclusions['directories']));
+
+        return $this->iterator->isDot() || $path->contains($this->exclusions['directories']);
     }
 
     protected function setFileExtension()
