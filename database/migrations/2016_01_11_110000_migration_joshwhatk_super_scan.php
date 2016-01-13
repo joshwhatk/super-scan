@@ -36,6 +36,7 @@ class MigrationJoshwhatkSuperScan extends Migration
         });
 
         Schema::create('baseline_files', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('path', 200);
             $table->char('hash', 40);
             $table->char('last_modified', 19)->nullable();
@@ -44,7 +45,7 @@ class MigrationJoshwhatkSuperScan extends Migration
 
             $table->engine = 'InnoDB';
 
-            $table->primary('path');
+            $table->unique(['path', 'account_id']);
             $table->foreign('account_id')->references('id')->on('accounts')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
