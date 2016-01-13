@@ -38,7 +38,7 @@ class MigrationJoshwhatkSuperScan extends Migration
 
         Schema::create('baseline_files', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('path', 200);
+            $table->string('path', 200)->index();
             $table->char('hash', 40);
             $table->char('last_modified', 19)->nullable();
             $table->integer('account_id')->nullable()->unsigned();
