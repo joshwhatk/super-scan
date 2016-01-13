@@ -248,6 +248,7 @@ class Scan
 
                 //-- add current file
                 $this->current->push([$file_path => new File($file_path)]);
+                $this->log($this->current);
 
                 //-- if the file was added
                 $this->handleNewFile($file_path);
