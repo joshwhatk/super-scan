@@ -243,6 +243,7 @@ class Scan
             $extension = $this->setFileExtension();
             $this->log($extension);
             $this->log($this->cleanPath($this->iterator->key()));
+            $this->log($this->extensionIsAllowed($extension));
 
             if($this->extensionIsAllowed($extension))
             {
@@ -347,7 +348,7 @@ class Scan
             return false;
         }
 
-        //-- extensions is not whitelisted and the extension is in that array
+        //-- whitelist is not set and the extension is in that array
         if($this->extensionIsBlacklisted($extension))
         {
             return false;
@@ -355,6 +356,7 @@ class Scan
 
         if(! $this->extensionIsWhitelisted($extension))
         {
+            $this->log('dieing in not whitelisted');
             return false;
         }
 
