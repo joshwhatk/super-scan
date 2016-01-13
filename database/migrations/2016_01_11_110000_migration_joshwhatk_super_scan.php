@@ -31,6 +31,7 @@ class MigrationJoshwhatkSuperScan extends Migration
                 $relation = $this->convertRelation($relation);
                 $table->integer($relation.'_id')->unsiged()->index();
             }
+            $table->timestamps();
 
             $table->engine = 'InnoDB';
         });
