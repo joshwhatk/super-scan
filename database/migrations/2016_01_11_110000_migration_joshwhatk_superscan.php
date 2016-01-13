@@ -53,8 +53,8 @@ class MigrationJoshwhatkSuperScan extends Migration
             $table->increments('id');
             $table->string('status', 10);
             $table->string('path', 200);
-            $table->string('baseline_hash', 40)->nullable()->default(null);
-            $table->string('latest_hash', 40)->nullable()->default(null);
+            $table->string('baseline_hash', 40)->nullable();
+            $table->string('latest_hash', 40)->nullable();
             $table->char('last_modified', 19)->nullable();
             $table->integer('account_id')->unsigned();
             $table->timestamps();
@@ -66,7 +66,8 @@ class MigrationJoshwhatkSuperScan extends Migration
         });
 
         Schema::create('scans', function (Blueprint $table) {
-            $table->integer('changes', 11)->default(0);
+            $table->increments('id');
+            $table->integer('changes')->default(0);
             $table->integer('account_id')->unsigned();
 
             $table->timestamps();
