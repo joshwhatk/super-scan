@@ -46,6 +46,11 @@ class File implements ArrayAccess
         return $array;
     }
 
+    public function __toString()
+    {
+        return $this->path;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ArrayAccess
