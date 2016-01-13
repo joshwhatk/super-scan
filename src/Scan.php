@@ -349,7 +349,7 @@ class Scan
             return false;
         }
 
-        if(! $this->extensionIsWhitelisted())
+        if(! $this->extensionIsWhitelisted($extension))
         {
             return false;
         }
