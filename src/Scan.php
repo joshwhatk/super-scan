@@ -153,6 +153,8 @@ class Scan
 
         $scan->report->addScan($scan);
         $scan->report->report();
+
+        return $scan;
     }
 
     private function initialize()
