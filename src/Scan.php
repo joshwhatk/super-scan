@@ -241,10 +241,12 @@ class Scan
         {
             //  Get or set file extension ('' vs null)
             $extension = $this->setFileExtension();
+            $this->log($extension);
+            $this->log($this->cleanPath($this->iterator->key()));
 
             if($this->extensionIsAllowed($extension))
             {
-                $file_path = $this->cleanPath($iterator->key());
+                $file_path = $this->cleanPath($this->iterator->key());
 
                 //-- add current file
                 $this->current->push([$file_path => new File($file_path)]);
