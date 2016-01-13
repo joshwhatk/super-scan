@@ -433,6 +433,10 @@ class Scan
 
     protected function directoryIsSkippable()
     {
+        $this->log($this->exclusions['directories']);
+        $this->log($this->iterator->getSubPath());
+        $this->log($this->exclusions['directories']->contains($this->iterator->getSubPath()));
+
         return $this->iterator->isDot() || $this->exclusions['directories']->contains($this->iterator->getSubPath());
     }
 
