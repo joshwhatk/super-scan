@@ -35,7 +35,7 @@ class FileHelper
 
         if(!$toArray)
         {
-            return $finder;
+            return $finder->getIterator();
         }
 
         return iterator_to_array($finder, false);
