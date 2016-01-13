@@ -30,30 +30,30 @@ class Scan
      *
      * @var \Joshwhatk\Database\Account
      */
-    protected $account;
+    public $account;
 
     /**
      * Initialize the array for the `baseline` table.
      *
      * @var \Illuminate\Support\Collection
      */
-    protected $baseline;
+    public $baseline;
 
     /**
      * Initialize the array for the current file scan.
      *
      * @var \Illuminate\Support\Collection
      */
-    protected $current;
+    public $current;
 
     /**
      * Intitialize the differences arrays.
      *
      * @var \Illuminate\Support\Collection
      */
-    protected $added;
-    protected $altered;
-    protected $deleted;
+    public $added;
+    public $altered;
+    public $deleted;
 
     /**
      * The Application's environment
@@ -66,7 +66,7 @@ class Scan
      *
      * @var boolean
      */
-    protected $first_scan = false;
+    public $first_scan = false;
 
     /**
      * The time that the scan was started.
