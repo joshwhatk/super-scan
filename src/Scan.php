@@ -18,9 +18,10 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Joshwhatk\SuperScan\Report;
 use Joshwhatk\SuperScan\Support\File;
+use Joshwhatk\SuperScan\Database\BaselineFile;
 use Joshwhatk\SuperScan\Database\HistoryRecord;
-use Joshwhatk\SuperScan\Contracts\AccountInterface;
 use Joshwhatk\SuperScan\Database\Scan as FilesScan;
+use Joshwhatk\SuperScan\Contracts\AccountInterface;
 
 class Scan
 {
