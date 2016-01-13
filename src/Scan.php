@@ -241,9 +241,6 @@ class Scan
         {
             //  Get or set file extension ('' vs null)
             $extension = $this->setFileExtension();
-            $this->log($extension);
-            $this->log($this->cleanPath($this->iterator->key()));
-            $this->log($this->extensionIsAllowed($extension));
 
             if($this->extensionIsAllowed($extension))
             {
@@ -354,9 +351,8 @@ class Scan
             return false;
         }
 
-        if(! $this->extensionIsWhitelisted($extension))
+        if($this->whitelistIsSet() && !$this->extensionIsWhitelisted($extension))
         {
-            $this->log('dieing in not whitelisted');
             return false;
         }
 
@@ -380,7 +376,7 @@ class Scan
     protected function extensionIsWhitelisted($extension)
     {
         //-- if whitelist is set and it is in only extensions
-        if($this->whitelistIsSet() && $this->only_extensions->contains($extension))
+        if($this->only_extensions->contains($extension))
         {
             return true;
         }
