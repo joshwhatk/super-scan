@@ -87,9 +87,9 @@ class MigrationJoshwhatkSuperScan extends Migration
      */
     public function down()
     {
-        Schema::drop('scanned');
-        Schema::drop('history');
-        Schema::drop('baseline');
+        Schema::drop('scans');
+        Schema::drop('history_records');
+        Schema::drop('baseline_files');
         Schema::drop('accounts');
     }
 
