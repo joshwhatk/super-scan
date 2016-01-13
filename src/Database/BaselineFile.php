@@ -40,7 +40,8 @@ class BaselineFile extends Model
     public static function createFromFile(File $file, AccountInterface $account)
     {
         $baseline = new static;
-        $baseline->fill($file->toArray($account));
+        $baseline->fill($file->toArray());
+        $baseline->account_id = $account->id;
         $baseline->save();
 
         return $baseline;
