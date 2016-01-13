@@ -247,7 +247,7 @@ class Scan
                 $file_path = $this->cleanPath($this->iterator->key());
 
                 //-- add current file
-                $this->current->push([$file_path => new File($file_path)]);
+                $this->current->put($file_path, new File($file_path));
                 $this->log($this->current);
 
                 //-- if the file was added
@@ -265,9 +265,7 @@ class Scan
         //-- it is added if baseline doesn't contain the $file_path
         if(! $this->baseline->contains($file_path))
         {
-            $this->added->push([
-                $file_path => $this->current[$file_path]
-            ]);
+            $this->added->put($file_path, $this->current[$file_path]);
 
             //-- insert added file into baseline table
             BaselineFile::createFromFile($this->current[$file_path], $this->account);
@@ -288,9 +286,7 @@ class Scan
             $this->baseline[$file_path]['last_modified'] != $this->current[$file_path]['last_modified'])
         )
         {
-            $this->altered->push([
-                $file_path => [$this->current[$file_path]]
-            ]);
+            $this->altered->put($file_path, $this->current[$file_path]);
 
             //-- add the baseline_hash
             $this->altered[$file_path]['baseline_hash'] = $this->baseline[$file_path]['hash'];
