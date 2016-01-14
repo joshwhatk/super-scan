@@ -38,9 +38,9 @@ class MigrationJoshwhatkSuperScan extends Migration
 
         Schema::create('baseline_files', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('path', 200)->index();
+            $table->string('path')->index();
             $table->char('hash', 40);
-            $table->char('last_modified', 19)->nullable();
+            $table->timestamp('last_modified')->nullable();
             $table->integer('account_id')->nullable()->unsigned();
             $table->timestamps();
 
@@ -54,10 +54,10 @@ class MigrationJoshwhatkSuperScan extends Migration
         Schema::create('history_records', function (Blueprint $table) {
             $table->increments('id');
             $table->string('status', 10);
-            $table->string('path', 200);
-            $table->string('baseline_hash', 40)->nullable();
-            $table->string('latest_hash', 40)->nullable();
-            $table->char('last_modified', 19)->nullable();
+            $table->string('path')->index();
+            $table->char('baseline_hash', 40)->nullable();
+            $table->char('latest_hash', 40)->nullable();
+            $table->timestamp('last_modified')->nullable();
             $table->integer('account_id')->unsigned();
             $table->timestamps();
 
