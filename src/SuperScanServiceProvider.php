@@ -35,7 +35,7 @@ class SuperScanServiceProvider extends ServiceProvider
             __DIR__.'/../database/migrations/' => database_path('migrations')
         ]);
 
-        $this->loadViewsFrom(__DIR__.'/../views', 'joshwhatk');
+        $this->loadViewsFrom(__DIR__.'/../views', 'super-scan');
     }
 
     /**
