@@ -19,7 +19,7 @@ use Joshwhatk\SuperScan\Contracts\AccountInterface;
 
 class BaselineFile extends Model
 {
-    protected $fillable = ['path', 'hash', 'last_modified'];
+    protected $fillable = ['path', 'hash', 'last_modified', 'account_id'];
 
     public function scopeAccount($query, AccountInterface $account)
     {

@@ -17,6 +17,8 @@ use Joshwhatk\SuperScan\Contracts\AccountInterface;
 
 class Account extends Model implements AccountInterface
 {
+    protected $fillable = ['name'];
+
     /**
      * Get the name of the Server for the Account.
      * @return string
