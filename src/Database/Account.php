@@ -41,7 +41,7 @@ class Account extends Model implements AccountInterface
      * Get the Webroot of the Website for the Account.
      * @return string
      */
-    public function getWebroot()
+    public function getScanDirectory()
     {
         //
     }

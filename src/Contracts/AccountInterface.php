@@ -28,9 +28,10 @@ interface AccountInterface
 
     /**
      * Get the Webroot of the Website for the Account.
+     * No need for a trailing slash
      * @return string
      */
-    public function getWebroot();
+    public function getScanDirectory();
 
     /**
      * Get the URL of the Website for the Account.

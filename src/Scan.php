@@ -190,7 +190,7 @@ class Scan
     {
         //-- directory, excluded directories
         $allFiles = FileHelper::make()
-            ->allFiles($this->account->getWebroot(), $this->exclusions['directories']->toArray(), true);
+            ->allFiles($this->account->getScanDirectory(), $this->exclusions['directories']->toArray(), true);
 
         foreach($allFiles as $file)
         {
