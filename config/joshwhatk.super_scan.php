@@ -12,10 +12,28 @@
 
 return [
 
-    'account_information' => [
-        'relations' => [
-            'servers',
-            'websites',
+    'account' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default Account
+        |--------------------------------------------------------------------------
+        |
+        | This account information is saved to the database during the super-scan
+        | migrations. If you are not using the default
+        | JoshWhatK\SuperScan\Database\Account model, then this can be removed.
+        |
+        */
+
+        'defaut' => [
+            'name' => 'Base Account',
+            'server_name' => 'hostname',
+            'ip_address' => '127.0.0.1',
+            'scan_directory' => '/var/www/html'
+            'public_url' => 'https://www.example.com',
+            'excluded_directories' => [
+                'logs',
+            ],
         ],
     ],
 

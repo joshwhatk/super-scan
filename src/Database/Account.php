@@ -17,7 +17,11 @@ use JoshWhatK\SuperScan\Contracts\AccountInterface;
 
 class Account extends Model implements AccountInterface
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'server_name', 'ip_address', 'scan_directory', 'public_url', 'excluded_directories',];
+
+    protected $casts = [
+        'excluded_directories' => 'array',
+    ];
 
     /**
      * Get the name of the Server for the Account.
@@ -25,7 +29,7 @@ class Account extends Model implements AccountInterface
      */
     public function getServerName()
     {
-        //
+        return $this->server_name;
     }
 
     /**
@@ -34,16 +38,17 @@ class Account extends Model implements AccountInterface
      */
     public function getIpAddress()
     {
-        //
+        return $this->ip_address;
     }
 
     /**
      * Get the Webroot of the Website for the Account.
+     * No need for a trailing slash.
      * @return string
      */
     public function getScanDirectory()
     {
-        //
+        return $this->scan_directory;
     }
 
     /**
@@ -52,7 +57,7 @@ class Account extends Model implements AccountInterface
      */
     public function getUrl()
     {
-        //
+        return $this->public_url;
     }
 
     /**
@@ -61,6 +66,7 @@ class Account extends Model implements AccountInterface
      */
     public function getExcludedDirectories()
     {
-        //
+        return $this->excluded_directories;
+    }
     }
 }

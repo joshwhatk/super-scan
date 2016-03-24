@@ -26,15 +26,18 @@ class MigrationJoshwhatkSuperScan extends Migration
         {
             $table->increments('id');
             $table->string('name');
-            foreach(config('joshwhatk.super_scan.account_information.relations') as $relation)
-            {
-                $relation = $this->convertRelation($relation);
-                $table->integer($relation.'_id')->unsiged()->index();
-            }
+            $table->string('server_name');
+            $table->string('ip_address');
+            $table->string('scan_directory');
+            $table->string('public_url');
+            $table->json('excluded_directories');
             $table->timestamps();
 
             $table->engine = 'InnoDB';
         });
+
+        //-- create the default account
+        Account::create(config('joshwhatk.super_scan.account.defaut'));
 
         Schema::create('baseline_files', function (Blueprint $table) {
             $table->increments('id');
@@ -92,11 +95,5 @@ class MigrationJoshwhatkSuperScan extends Migration
         Schema::drop('history_records');
         Schema::drop('baseline_files');
         Schema::drop('accounts');
-    }
-
-
-    protected function convertRelation($relation)
-    {
-        return str_singular($relation);
     }
 }
