@@ -68,5 +68,20 @@ class Account extends Model implements AccountInterface
     {
         return $this->excluded_directories;
     }
+
+    /**
+     * Helper function for adding excluded directories
+     * @param string $directory_name
+     *
+     * @return JoshWhatK\SuperScan\Database\Account
+     */
+    public function addExcludedDirectory($directory_name)
+    {
+        $this->excluded_directories = collect($this->excluded_directories)
+            ->push($directory_name)
+            ->toArray();
+        $this->save();
+
+        return $this;
     }
 }
