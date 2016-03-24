@@ -10,10 +10,10 @@
  * @link       http://jwk.me
  */
 
-namespace Joshwhatk\SuperScan\Database;
+namespace JoshWhatK\SuperScan\Database;
 
 use Illuminate\Database\Eloquent\Model;
-use Joshwhatk\SuperScan\Contracts\AccountInterface;
+use JoshWhatK\SuperScan\Contracts\AccountInterface;
 
 class Account extends Model implements AccountInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Joshwhatk\SuperScan;
+namespace JoshWhatK\SuperScan;
 
 /**
  * Part of the SuperScan package.

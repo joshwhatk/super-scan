@@ -1,9 +1,9 @@
 <?php
 
-namespace Joshwhatk\SuperScan\Support;
+namespace JoshWhatK\SuperScan\Support;
 
 use Carbon\Carbon;
-use Joshwhatk\SuperScan\Database\BaselineFile;
+use JoshWhatK\SuperScan\Database\BaselineFile;
 use ArrayAccess;
 
 class File implements ArrayAccess

@@ -10,12 +10,12 @@
  * @link       http://jwk.me
  */
 
-namespace Joshwhatk\SuperScan\Database;
+namespace JoshWhatK\SuperScan\Database;
 
-use Joshwhatk\SuperScan\Support\File;
+use JoshWhatK\SuperScan\Support\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use Joshwhatk\SuperScan\Contracts\AccountInterface;
+use JoshWhatK\SuperScan\Contracts\AccountInterface;
 
 class BaselineFile extends Model
 {

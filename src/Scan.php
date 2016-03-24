@@ -1,6 +1,6 @@
 <?php
 
-namespace Joshwhatk\SuperScan;
+namespace JoshWhatK\SuperScan;
 
 /**
  * Part of the SuperScan package.
@@ -15,21 +15,22 @@ namespace Joshwhatk\SuperScan;
 use \Log;
 use \Carbon\Carbon;
 use RecursiveIteratorIterator;
+use JoshWhatK\SuperScan\Report;
 use RecursiveDirectoryIterator;
-use Joshwhatk\SuperScan\Report;
-use Joshwhatk\SuperScan\Support\File;
-use Joshwhatk\SuperScan\Support\FileHelper;
-use Joshwhatk\SuperScan\Database\BaselineFile;
-use Joshwhatk\SuperScan\Database\HistoryRecord;
-use Joshwhatk\SuperScan\Database\Scan as FilesScan;
-use Joshwhatk\SuperScan\Contracts\AccountInterface;
+use JoshWhatK\SuperScan\Support\File;
+use JoshWhatK\SuperScan\Support\FileHelper;
+use JoshWhatK\SuperScan\Database\BaselineFile;
+use JoshWhatK\SuperScan\Database\HistoryRecord;
+use JoshWhatK\SuperScan\Contracts\AccountInterface;
+use JoshWhatK\SuperScan\Database\Scan as FileScan;
+use JoshWhatK\SuperScan\Contracts\ReportingInterface;
 
 class Scan
 {
     /**
      * The Account for which the SuperScan is being run.
      *
-     * @var \Joshwhatk\Database\Account
+     * @var \JoshWhatK\Database\Account
      */
     public $account;
 
@@ -79,7 +80,7 @@ class Scan
     /**
      * The Report to run for the current Scan
      *
-     * @var \Joshwhatk\SuperScan\Report
+     * @var \JoshWhatK\SuperScan\Report
      */
     protected $report;
 

@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Joshwhatk\\SuperScan\\": "src"
+            "JoshWhatK\\SuperScan\\": "src"
         }
     },
     "license": "MIT",

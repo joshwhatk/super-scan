@@ -1,6 +1,6 @@
 <?php
 
-namespace Joshwhatk\SuperScan\Support;
+namespace JoshWhatK\SuperScan\Support;
 
 use Symfony\Component\Finder\Finder;
 

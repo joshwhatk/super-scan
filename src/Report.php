@@ -10,13 +10,13 @@
  * @link       http://jwk.me
  */
 
-namespace Joshwhatk\SuperScan;
+namespace JoshWhatK\SuperScan;
 
 class Report
 {
     /**
      * The Scan on which to run the Report
-     * @var \Joshwhatk\SuperScan\Support\Scan
+     * @var \JoshWhatK\SuperScan\Support\Scan
      */
     protected $scan;
 

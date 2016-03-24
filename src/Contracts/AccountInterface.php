@@ -10,7 +10,7 @@
  * @link       http://jwk.me
  */
 
-namespace Joshwhatk\SuperScan\Contracts;
+namespace JoshWhatK\SuperScan\Contracts;
 
 interface AccountInterface
 {
