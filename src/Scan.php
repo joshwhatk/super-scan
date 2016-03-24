@@ -227,7 +227,7 @@ class Scan
     protected function save()
     {
         $count_of_changes = $this->added->count() + $this->altered->count() + $this->deleted->count();
-        $scan = new FilesScan;
+        $scan = new FileScan;
         $scan->changes = $count_of_changes;
         $scan->account_id = $this->account->id;
         $scan->save();
@@ -446,7 +446,7 @@ class Scan
 
     protected function getLastScanTime()
     {
-        return FilesScan::account($this->account)
+        return FileScan::account($this->account)
             ->orderBy('created_at', 'desc')->limit(1)->get();
     }
 
