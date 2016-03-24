@@ -197,8 +197,7 @@ class Scan
         $allFiles = FileHelper::make()
             ->allFiles($this->account->getScanDirectory(), $this->exclusions['directories']->toArray(), true);
 
-        foreach($allFiles as $file)
-        {
+        foreach ($allFiles as $file) {
             $this->current_file = $file;
             $this->checkDirectoriesAndFiles();
         }
@@ -261,11 +260,10 @@ class Scan
             //  Get or set file extension ('' vs null)
             $extension = $this->setFileExtension();
 
-            if($this->extensionIsAllowed($extension))
-            {
-                $file_path = $this->cleanPath($this->current_file->getRealPath());
-                $this->log(['$this->current_file->getRealPath()' => $this->current_file->getRealPath()]);
-                $this->log(['$file_path' => $file_path]);
+        if ($this->extensionIsAllowed($extension)) {
+            $file_path = $this->cleanPath($this->current_file->getRealPath());
+            $this->log(['$this->current_file->getRealPath()' => $this->current_file->getRealPath()]);
+            $this->log(['$file_path' => $file_path]);
 
                 //-- add current file
                 $this->current->put($file_path, new File($file_path));
@@ -275,22 +273,20 @@ class Scan
 
                 //-- if the file was altered
                 $this->handleAlteredFile($file_path);
-            }
+        }
         // }
     }
 
     protected function handleNewFile($file_path)
     {
         //-- it is added if baseline doesn't contain the $file_path
-        if(! $this->baseline->contains($file_path))
-        {
+        if (! $this->baseline->contains($file_path)) {
             $this->added->put($file_path, $this->current[$file_path]);
 
             //-- insert added file into baseline table
             BaselineFile::createFromFile($this->current[$file_path], $this->account);
 
-            if(! $this->first_scan)
-            {
+            if (! $this->first_scan) {
                 return $this->saveAddedFileToHistory($file_path);
             }
         }
@@ -298,13 +294,12 @@ class Scan
 
     protected function handleAlteredFile($file_path)
     {
-        if($this->baseline->contains($file_path)
+        if ($this->baseline->contains($file_path)
            &&
            ($this->baseline[$file_path]['hash'] != $this->current[$file_path]['hash']
             ||
             $this->baseline[$file_path]['last_modified'] != $this->current[$file_path]['last_modified'])
-        )
-        {
+        ) {
             $this->altered->put($file_path, $this->current[$file_path]);
 
             //-- add the baseline_hash
@@ -350,25 +345,22 @@ class Scan
 
     protected function cleanPath($path)
     {
-        return str_replace(chr(92),chr(47),$path);
+        return str_replace(chr(92), chr(47), $path);
     }
 
     protected function extensionIsAllowed($extension)
     {
         // extension is empty and extensionless are not scanned
-        if($extension === '' && !$this->config['scan_extensionless'])
-        {
+        if ($extension === '' && !$this->config['scan_extensionless']) {
             return false;
         }
 
         //-- whitelist is not set and the extension is in that array
-        if($this->extensionIsBlacklisted($extension))
-        {
+        if ($this->extensionIsBlacklisted($extension)) {
             return false;
         }
 
-        if($this->whitelistIsSet() && !$this->extensionIsWhitelisted($extension))
-        {
+        if ($this->whitelistIsSet() && !$this->extensionIsWhitelisted($extension)) {
             return false;
         }
 
@@ -378,10 +370,9 @@ class Scan
     protected function extensionIsBlacklisted($extension)
     {
         //-- the extensions is not whitelisted and the blacklist contains it
-        if(!$this->whitelistIsSet()
+        if (!$this->whitelistIsSet()
            &&
-           $this->exclusions['extensions']->contains($extension))
-        {
+           $this->exclusions['extensions']->contains($extension)) {
             return true;
         }
 
@@ -392,8 +383,7 @@ class Scan
     protected function extensionIsWhitelisted($extension)
     {
         //-- if whitelist is set and it is in only extensions
-        if($this->only_extensions->contains($extension))
-        {
+        if ($this->only_extensions->contains($extension)) {
             return true;
         }
 
@@ -403,8 +393,7 @@ class Scan
 
     protected function getExcludedExtensions()
     {
-        if(! $this->whitelistIsSet())
-        {
+        if (! $this->whitelistIsSet()) {
             $this->exclusions['extensions'] = collect($this->config['extensions']['blacklist']);
         }
     }
@@ -418,14 +407,12 @@ class Scan
         $whitelist = $this->config['extensions']['whitelist'];
 
         //-- return false if the whitelist is empty
-        if($whitelist === [])
-        {
+        if ($whitelist === []) {
             return false;
         }
 
         //-- set up the only_extensions property
-        if(is_null($this->only_extensions))
-        {
+        if (is_null($this->only_extensions)) {
             $this->only_extensions = collect($whitelist);
         }
 
@@ -438,8 +425,7 @@ class Scan
 
         //-- add any excluded directories specific to this account
         $account_exclusions = collect($this->account->getExcludedDirectories());
-        if(! $account_exclusions->isEmpty())
-        {
+        if (! $account_exclusions->isEmpty()) {
             $this->exclusions['directories']->merge($account_exclusions->all());
         }
     }
@@ -464,8 +450,7 @@ class Scan
 
     protected function setFileExtension()
     {
-        if (is_null(pathinfo($this->current_file->getRealPath(), PATHINFO_EXTENSION)))
-        {
+        if (is_null(pathinfo($this->current_file->getRealPath(), PATHINFO_EXTENSION))) {
             return '';
         }
 
