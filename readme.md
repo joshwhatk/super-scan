@@ -23,7 +23,7 @@ Publish the config file and migrations:
 php artisan vendor:publish --provider="JoshWhatK\SuperScan\SuperScanServiceProvider"
 ```
 
-Change the default Account as you wish:
+Change the default Account(s) as you wish:
 
 > Example
 
@@ -41,14 +41,16 @@ Change the default Account as you wish:
     |
     */
 
-    'defaut' => [
-        'name' => 'Base Account',
-        'server_name' => 'hostname',
-        'ip_address' => '127.0.0.1',
-        'scan_directory' => '/var/www/html' # no trailing slash needed
-        'public_url' => 'https://www.example.com',
-        'excluded_directories' => [
-            'logs',
+    'defauts' => [
+        [
+            'name' => 'Base Account',
+            'server_name' => 'hostname',
+            'ip_address' => '127.0.0.1',
+            'scan_directory' => '/var/www/html'
+            'public_url' => 'https://www.example.com',
+            'excluded_directories' => [
+                'logs',
+            ],
         ],
     ],
 ],

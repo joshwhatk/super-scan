@@ -25,14 +25,16 @@ return [
         |
         */
 
-        'defaut' => [
-            'name' => 'Base Account',
-            'server_name' => 'hostname',
-            'ip_address' => '127.0.0.1',
-            'scan_directory' => '/var/www/html'
-            'public_url' => 'https://www.example.com',
-            'excluded_directories' => [
-                'logs',
+        'defauts' => [
+            [
+                'name' => 'Base Account',
+                'server_name' => 'hostname',
+                'ip_address' => '127.0.0.1',
+                'scan_directory' => '/var/www/html'
+                'public_url' => 'https://www.example.com',
+                'excluded_directories' => [
+                    'logs',
+                ],
             ],
         ],
     ],

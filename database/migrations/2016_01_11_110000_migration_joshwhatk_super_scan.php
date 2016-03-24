@@ -37,7 +37,10 @@ class MigrationJoshwhatkSuperScan extends Migration
         });
 
         //-- create the default account
-        Account::create(config('joshwhatk.super_scan.account.defaut'));
+        foreach(config('joshwhatk.super_scan.account.defaults') as $account)
+        {
+            Account::create($account);
+        }
 
         Schema::create('baseline_files', function (Blueprint $table) {
             $table->increments('id');
