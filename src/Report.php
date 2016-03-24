@@ -12,7 +12,9 @@
 
 namespace JoshWhatK\SuperScan;
 
-class Report
+use JoshWhatK\SuperScan\Contracts\ReportingInterface;
+
+class Report implements ReportingInterface
 {
     /**
      * The Scan on which to run the Report

@@ -143,9 +143,14 @@ class Scan
         ]);
     }
 
-    public static function run(AccountInterface $account)
+    public static function run(AccountInterface $account, $report = null)
     {
-        $scan = new static($account, new Report);
+        //-- use a ReportingInterface
+        if (! is_a($report, ReportingInterface)) {
+            $report = new Report;
+        }
+
+        $scan = new static($account, $report);
 
         $scan->initialize();
         $scan->determineBaseline();
