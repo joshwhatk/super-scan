@@ -24,6 +24,15 @@ class Account extends Model implements AccountInterface
     ];
 
     /**
+     * Get the name of the Account.
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Get the name of the Server for the Account.
      * @return string
      */

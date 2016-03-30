@@ -15,6 +15,12 @@ namespace JoshWhatK\SuperScan\Contracts;
 interface AccountInterface
 {
     /**
+     * Get the name of the Account.
+     * @return string
+     */
+    public function getName();
+
+    /**
      * Get the name of the Server for the Account.
      * @return string
      */
