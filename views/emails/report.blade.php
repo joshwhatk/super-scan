@@ -30,7 +30,7 @@
                   <h2>SuperScan Report</h2>
                   <p class="lead">{{ $account->getName() }}</p>
                   <p class="subheader">
-                    Time of Scan: {{ $scan->timestamps['completed'] }}, taking {{ $scan->timestamps['duration'] }}
+                    Time of Scan: {{ $scan->timestamps['completed']->toDayDateTimeString() }}, taking {{ $scan->timestamps['duration'] }}
                   </p>
                   <hr>
                   @if(! $messages->isEmpty())

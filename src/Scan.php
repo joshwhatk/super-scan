@@ -219,7 +219,7 @@ class Scan
     private function complete()
     {
         $this->timestamps['completed'] = new Carbon;
-        $this->timestamps['duration'] = $this->timestamps['started']->diff($this->timestamps['completed']);
+        $this->timestamps['duration'] = $this->timestamps['started']->diffForHumans($this->timestamps['completed'], true);
         $this->save();
         $this->dump();
     }
