@@ -40,6 +40,17 @@ class Report implements ReportingInterface
         $baseline_count = $this->scan->baseline->count();
         $this->scan->log($baseline_count." baseline files extracted from database.");
 
+        $account = $this->scan->account;
+        $scan = $this->scan;
+        $messages = $this->messages;
+        $added = $this->scan->added;
+        $altered = $this->scan->altered;
+        $removed = $this->scan->removed;
+
+        $altered_files_text = $this->getFilesText($altered);
+        $added_files_text = $this->getFilesText($added);
+        $removed_files_text = $this->getFilesText($removed);
+
         Mail::send('super-scan.emails.report', compact(
             $account,
             $scan,
@@ -55,18 +66,6 @@ class Report implements ReportingInterface
 
             $m->to(config('joshwhatk.super-scan.reporting.recipients'))->subject('SuperScan Report');
         });
-
-        return view('super-scan.emails.report')->with(compact(
-            $account,
-            $scan,
-            $messages,
-            $added,
-            $altered,
-            $removed,
-            $altered_files_text,
-            $added_files_text,
-            $removed_files_text)
-        );
     }
 
     public function alert($message, $type = null)
@@ -80,5 +79,20 @@ class Report implements ReportingInterface
             'content' => $message,
             'type' => $type,
         ]);
+    }
+
+    protected function getFilesText($files)
+    {
+        if($files->isEmpty())
+        {
+            return 'No Files';
+        }
+
+        if($files->count() == 1)
+        {
+            return '1 File';
+        }
+
+        return $files->count().' Files';
     }
 }
