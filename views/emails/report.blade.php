@@ -186,6 +186,7 @@
     </table>
   </th>
 </tr></tbody></table>
+@endif
 
 @if(! $deleted->isEmpty())
 <table class="row"><tbody><tr>
