@@ -45,11 +45,11 @@ class Report implements ReportingInterface
         $messages = $this->messages;
         $added = $this->scan->added;
         $altered = $this->scan->altered;
-        $removed = $this->scan->removed;
+        $deleted = $this->scan->deleted;
 
         $altered_files_text = $this->getFilesText($altered);
         $added_files_text = $this->getFilesText($added);
-        $removed_files_text = $this->getFilesText($removed);
+        $deleted_files_text = $this->getFilesText($deleted);
 
         Mail::send('super-scan.emails.report', compact(
             $account,
@@ -57,10 +57,10 @@ class Report implements ReportingInterface
             $messages,
             $added,
             $altered,
-            $removed,
+            $deleted,
             $altered_files_text,
             $added_files_text,
-            $removed_files_text), function ($m)
+            $deleted_files_text), function ($m)
         {
             $m->from(config('joshwhatk.super-scan.reporting.from.email'), config('joshwhatk.super-scan.reporting.from.name'));
 

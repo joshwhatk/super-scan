@@ -5,10 +5,10 @@
   $messages,
   $added,
   $altered,
-  $removed,
+  $deleted,
   $altered_files_text,
   $added_files_text,
-  $removed_files_text,
+  $deleted_files_text,
 
 --}}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -57,7 +57,7 @@
                     {{ $added_files_text }} Added
                   </p>
                   <p class="text-primary">
-                    {{ $removed_files_text }} Removed
+                    {{ $deleted_files_text }} Removed
                   </p>
                   <hr>
                 </th>
@@ -187,7 +187,7 @@
   </th>
 </tr></tbody></table>
 
-@if(! $removed->isEmpty())
+@if(! $deleted->isEmpty())
 <table class="row"><tbody><tr>
   <th class="small-12 large-12 columns first last">
     <table>
