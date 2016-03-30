@@ -50,21 +50,15 @@
         <tr>
           <th>
                   <h3>Overview</h3>
-                  @if(! $altered->isEmpty())
-                    <p class="text-alert">
-                      {{ $altered_files_text }} Modified
-                    </p>
-                  @endif
-                  @if(! $added->isEmpty())
-                    <p class="text-warning">
-                      {{ $added_files_text }} Added
-                    </p>
-                  @endif
-                  @if(! $removed->isEmpty())
-                    <p class="text-primary">
-                      {{ $removed_files_text }} Removed
-                    </p>
-                  @endif
+                  <p class="text-alert">
+                    {{ $altered_files_text }} Modified
+                  </p>
+                  <p class="text-warning">
+                    {{ $added_files_text }} Added
+                  </p>
+                  <p class="text-primary">
+                    {{ $removed_files_text }} Removed
+                  </p>
                   <hr>
                 </th>
 <th class="expander"></th>
