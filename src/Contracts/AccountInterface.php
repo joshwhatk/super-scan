@@ -41,7 +41,7 @@ interface AccountInterface
 
     /**
      * Get a Collection of excluded file paths.
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function getExcludedDirectories();
 }
