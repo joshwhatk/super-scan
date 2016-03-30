@@ -52,6 +52,12 @@ class Report implements ReportingInterface
         $deleted_files_text = $this->getFilesText($deleted);
         $timezone = config('app.timezone');
 
+        if($added->isEmpty() && $altered->isEmpty() && $deleted->isEmpty())
+        {
+            $this->scan->log('No file changes detected.');
+            return;
+        }
+
         Mail::send('super-scan::emails.report',
         [
             'account' => $account,
