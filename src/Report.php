@@ -22,6 +22,13 @@ class Report implements ReportingInterface
      */
     protected $scan;
 
+    protected $messages;
+
+    public function __construct()
+    {
+        $this->messages = collect([]);
+    }
+
     public function addScan(Scan $scan)
     {
         $this->scan = $scan;
@@ -30,16 +37,31 @@ class Report implements ReportingInterface
     public function report()
     {
         $baseline_count = $this->scan->baseline->count();
-        $this->add($this->scan->baseline->count()." baseline files extracted from database.  ");
+        $this->scan->log($baseline_count." baseline files extracted from database.");
+
+        return view('super-scan.emails.report')->with(compact(
+            $account,
+            $scan,
+            $messages,
+            $added,
+            $altered,
+            $removed,
+            $altered_files_text,
+            $added_files_text,
+            $removed_files_text)
+        );
     }
 
-    public function add($message, $type = 'info')
+    public function alert($message, $type = null)
     {
-        //
-    }
+        if(is_null($type))
+        {
+            $type = 'alert';
+        }
 
-    public function alert($message)
-    {
-        $this->add($message, 'alert');
+        $this->messages = $this->messages->push([
+            'content' => $message,
+            'type' => $type,
+        ]);
     }
 }
