@@ -39,6 +39,22 @@ class Report implements ReportingInterface
         $baseline_count = $this->scan->baseline->count();
         $this->scan->log($baseline_count." baseline files extracted from database.");
 
+        Mail::send('super-scan.emails.report', compact(
+            $account,
+            $scan,
+            $messages,
+            $added,
+            $altered,
+            $removed,
+            $altered_files_text,
+            $added_files_text,
+            $removed_files_text), function ($m)
+        {
+            $m->from(config('joshwhatk.super-scan.reporting.from.email'), config('joshwhatk.super-scan.reporting.from.name'));
+
+            $m->to(config('joshwhatk.super-scan.reporting.recipients'))->subject('SuperScan Report');
+        });
+
         return view('super-scan.emails.report')->with(compact(
             $account,
             $scan,
