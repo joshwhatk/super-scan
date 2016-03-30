@@ -75,7 +75,7 @@ class Scan
      *
      * @var array
      */
-    protected $timestamps = [];
+    public $timestamps = [];
 
     /**
      * The Report to run for the current Scan
@@ -219,6 +219,7 @@ class Scan
     private function complete()
     {
         $this->timestamps['completed'] = new Carbon;
+        $this->timestamps['duration'] = $this->timestamps['started']->diff($this->timestamps['completed']);
         $this->save();
         $this->dump();
     }
