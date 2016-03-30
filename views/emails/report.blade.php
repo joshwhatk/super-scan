@@ -239,7 +239,7 @@
               <table>
                 <tr>
                   <th>
-                    <p>{{ $file->last_modified }}</p>
+                    <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
                   </th>
                 </tr>
               </table>
