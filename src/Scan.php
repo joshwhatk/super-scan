@@ -146,7 +146,7 @@ class Scan
     public static function run(AccountInterface $account, $report = null)
     {
         //-- use a ReportingInterface
-        if (! is_a($report, ReportingInterface)) {
+        if (! is_a($report, ReportingInterface::class)) {
             $report = new Report;
         }
 
