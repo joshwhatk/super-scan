@@ -10,8 +10,9 @@
  * @link       http://jwk.me
  */
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use JoshWhatK\SuperScan\Database\Account;
+use Illuminate\Database\Migrations\Migration;
 
 class MigrationJoshwhatkSuperScan extends Migration
 {
@@ -30,7 +31,7 @@ class MigrationJoshwhatkSuperScan extends Migration
             $table->string('ip_address');
             $table->string('scan_directory');
             $table->string('public_url');
-            $table->json('excluded_directories');
+            $table->text('excluded_directories');
             $table->timestamps();
 
             $table->engine = 'InnoDB';
