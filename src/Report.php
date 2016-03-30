@@ -50,6 +50,7 @@ class Report implements ReportingInterface
         $altered_files_text = $this->getFilesText($altered);
         $added_files_text = $this->getFilesText($added);
         $deleted_files_text = $this->getFilesText($deleted);
+        $timezone = config('app.timezone');
 
         Mail::send('super-scan::emails.report',
         [
@@ -61,7 +62,8 @@ class Report implements ReportingInterface
             'deleted' => $deleted,
             'altered_files_text' => $altered_files_text,
             'added_files_text' => $added_files_text,
-            'deleted_files_text' => $deleted_files_text
+            'deleted_files_text' => $deleted_files_text,
+            'timezone' => $timezone,
         ], function ($m) {
             $config = config('joshwhatk.super_scan.reporting');
 

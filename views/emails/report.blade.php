@@ -30,7 +30,7 @@
                   <h2>SuperScan Report</h2>
                   <p class="lead">{{ $account->getName() }}</p>
                   <p class="subheader">
-                    Time of Scan: {{ $scan->timestamps['completed']->tz('America/New_York')->toDayDateTimeString() }}
+                    Time of Scan: {{ $scan->timestamps['completed']->tz($timezone)->toDayDateTimeString() }}
                   </p>
                   <p class="subheader">
                     Taking: {{ $scan->timestamps['duration'] }}
@@ -121,7 +121,7 @@
                   <table>
                     <tr>
                       <th>
-                        <p>{{ $file->last_modified->tz('America/New_York')->toDayDateTimeString() }}</p>
+                        <p>{{ $file->last_modified->tz($timezone)->toDayDateTimeString() }}</p>
                       </th>
                     </tr>
                   </table>
@@ -181,7 +181,7 @@
               <table>
                 <tr>
                   <th>
-                    <p>{{ $file->last_modified->tz('America/New_York')->toDayDateTimeString() }}</p>
+                    <p>{{ $file->last_modified->tz($timezone)->toDayDateTimeString() }}</p>
                   </th>
                 </tr>
               </table>
@@ -239,7 +239,7 @@
               <table>
                 <tr>
                   <th>
-                    <p>{{ $file->last_modified->tz('America/New_York')->toDayDateTimeString() }}</p>
+                    <p>{{ $file->last_modified->tz($timezone)->toDayDateTimeString() }}</p>
                   </th>
                 </tr>
               </table>
