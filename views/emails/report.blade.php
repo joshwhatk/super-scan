@@ -101,6 +101,7 @@
             </tbody>
           </table>
 
+          @foreach($altered as $file_path => $file)
           <table class="row">
             <tbody>
               <tr>
@@ -108,7 +109,7 @@
                   <table>
                     <tr>
                       <th>
-                        <p>/long/file/name</p>
+                        <p>{{ $file_path }}</p>
                       </th>
                     </tr>
                   </table>
@@ -117,7 +118,7 @@
                   <table>
                     <tr>
                       <th>
-                        <p>Monday, March 2, 2015</p>
+                        <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
                       </th>
                     </tr>
                   </table>
@@ -125,6 +126,8 @@
               </tr>
             </tbody>
           </table>
+          @endforeach
+
         </th>
       </tr>
     </table>
@@ -160,12 +163,13 @@
             </th>
           </tr></tbody></table>
 
+          @foreach($added as $file_path => $file)
           <table class="row"><tbody><tr>
             <th class="small-7 large-7 columns first">
               <table>
                 <tr>
                   <th>
-                    <p>/long/file/name</p>
+                    <p>{{ $file_path }}</p>
                   </th>
                 </tr>
               </table>
@@ -174,12 +178,13 @@
               <table>
                 <tr>
                   <th>
-                    <p>Monday, March 2, 2015</p>
+                    <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
                   </th>
                 </tr>
               </table>
             </th>
           </tr></tbody></table>
+          @endforeach
 
         </th>
       </tr>
@@ -216,12 +221,13 @@
             </th>
           </tr></tbody></table>
 
+          @foreach($deleted as $file_path => $file)
           <table class="row"><tbody><tr>
             <th class="small-7 large-7 columns first">
               <table>
                 <tr>
                   <th>
-                    <p>/long/file/name</p>
+                    <p>{{ $file_path }}</p>
                   </th>
                 </tr>
               </table>
@@ -230,12 +236,13 @@
               <table>
                 <tr>
                   <th>
-                    <p>Monday, March 2, 2015</p>
+                    <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
                   </th>
                 </tr>
               </table>
             </th>
           </tr></tbody></table>
+          @endforeach
 
         </th>
       </tr>
