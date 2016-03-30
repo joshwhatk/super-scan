@@ -57,3 +57,20 @@ Change the default Account(s) as you wish:
 ```
 
 If you would like to use your own Account model, just make sure that it implements `JoshWhatK\SuperScan\Contracts\AccountInterface`.
+
+Now you can set up the `Scan` to run as a Laravel task in `app/Console/Kernel.php`.
+
+```
+$schedule->call(function () {
+    try {
+        Scan::run(Account::first(), new Report);
+    } catch (\Exception $e) {
+    }
+})->everyMinute();
+```
+
+Now you can test it using:
+
+```
+php artisan schedule:run
+```
