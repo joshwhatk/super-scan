@@ -33,7 +33,7 @@ return [
                 'scan_directory' => '/var/www/html',
                 'public_url' => 'https://www.example.com',
                 'excluded_directories' => [
-                    'logs',
+                    'logs', 'cache'
                 ],
             ],
         ],
