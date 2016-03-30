@@ -118,7 +118,7 @@
                   <table>
                     <tr>
                       <th>
-                        <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
+                        <p>{{ $file->last_modified }}</p>
                       </th>
                     </tr>
                   </table>
@@ -178,7 +178,7 @@
               <table>
                 <tr>
                   <th>
-                    <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
+                    <p>{{ $file->last_modified }}</p>
                   </th>
                 </tr>
               </table>
@@ -236,7 +236,7 @@
               <table>
                 <tr>
                   <th>
-                    <p>{{ $file->last_modified->toDayDateTimeString() }}</p>
+                    <p>{{ $file->last_modified }}</p>
                   </th>
                 </tr>
               </table>
