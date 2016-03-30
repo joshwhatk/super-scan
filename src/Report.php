@@ -63,9 +63,11 @@ class Report implements ReportingInterface
             'added_files_text' => $added_files_text,
             'deleted_files_text' => $deleted_files_text
         ], function ($m) {
-            $m->from(config('joshwhatk.super-scan.reporting.from.email'), config('joshwhatk.super-scan.reporting.from.name'));
+            $config = config('joshwhatk.super-scan.reporting');
 
-            $m->to(config('joshwhatk.super-scan.reporting.recipients'))->subject('SuperScan Report');
+            $m->from($config['from']['email'], $config['from']['name']);
+
+            $m->to($config['recipients'])->subject('SuperScan Report');
         });
     }
 
