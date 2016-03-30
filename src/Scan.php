@@ -186,7 +186,7 @@ class Scan
 
         if ($this->baseline->isEmpty() && !$this->first_scan) {
             $this->alert(
-                "**Probable hack**  Empty baseline table!  (ALL baseline files are missing or deleted)!"
+                "**Probable Compromise**  Empty baseline table!  (ALL baseline files are missing or deleted)!"
             );
         }
     }
