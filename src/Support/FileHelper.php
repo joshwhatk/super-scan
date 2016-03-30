@@ -26,6 +26,8 @@ class FileHelper
      */
     public function allFiles($directory, $exclude = null, $toArray = false)
     {
+        $exclude = (array) $exclude;
+
         $finder = Finder::create()->files()->in($directory);
 
         if(!is_null($exclude))
