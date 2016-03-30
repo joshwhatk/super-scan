@@ -1,11 +1,22 @@
 <?php
 
-namespace Joshwhatk\SuperScan\Support;
+namespace JoshWhatK\SuperScan\Support;
+
+/**
+ * Part of the SuperScan package.
+ *
+ * @package    SuperScan
+ * @version    1.0.0
+ * @author     joshwhatk
+ * @license    MIT
+ * @link       http://jwk.me
+ */
 
 use Carbon\Carbon;
-use Joshwhatk\SuperScan\Database\BaselineFile;
+use JoshWhatK\SuperScan\Database\BaselineFile;
+use ArrayAccess;
 
-class File
+class File implements ArrayAccess
 {
     public $path;
     public $hash;
@@ -23,8 +34,8 @@ class File
         }
 
         $this->path = $file;
-        $this->hash = hash_file("sha1", $file_path);
-        $this->last_modified = new Carbon(filemtime($file_path));
+        $this->hash = hash_file("sha1", $file);
+        $this->last_modified = Carbon::createFromFormat('U', filemtime($file));
 
         return $this;
     }
@@ -43,5 +54,64 @@ class File
         }
 
         return $array;
+    }
+
+    public function __toString()
+    {
+        return $this->path;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ArrayAccess
+    |--------------------------------------------------------------------------
+    |
+    | Pulled this from Illuminate\Database\Eloquent\Model::class
+    |
+    */
+
+    /**
+     * Determine if the given attribute exists.
+     *
+     * @param  mixed  $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->$offset);
+    }
+
+    /**
+     * Get the value for a given offset.
+     *
+     * @param  mixed  $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return $this->$offset;
+    }
+
+    /**
+     * Set the value for a given offset.
+     *
+     * @param  mixed  $offset
+     * @param  mixed  $value
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->$offset = $value;
+    }
+
+    /**
+     * Unset the value for a given offset.
+     *
+     * @param  mixed  $offset
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->$offset);
     }
 }

@@ -1,19 +1,25 @@
 <?php
 
+namespace JoshWhatK\SuperScan\Contracts;
+
 /**
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    0.0.4
+ * @version    1.0.0
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
  */
 
-namespace Joshwhatk\SuperScan\Contracts;
-
 interface AccountInterface
 {
+    /**
+     * Get the name of the Account.
+     * @return string
+     */
+    public function getName();
+
     /**
      * Get the name of the Server for the Account.
      * @return string
@@ -28,9 +34,10 @@ interface AccountInterface
 
     /**
      * Get the Webroot of the Website for the Account.
+     * No need for a trailing slash
      * @return string
      */
-    public function getWebroot();
+    public function getScanDirectory();
 
     /**
      * Get the URL of the Website for the Account.
@@ -40,7 +47,7 @@ interface AccountInterface
 
     /**
      * Get a Collection of excluded file paths.
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function getExcludedDirectories();
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Joshwhatk\SuperScan;
+namespace JoshWhatK\SuperScan;
 
 /**
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    0.0.4
+ * @version    1.0.0
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -34,6 +34,8 @@ class SuperScanServiceProvider extends ServiceProvider
             __DIR__.'/../config/joshwhatk.super_scan.php' => config_path('joshwhatk.super_scan.php'),
             __DIR__.'/../database/migrations/' => database_path('migrations')
         ]);
+
+        $this->loadViewsFrom(__DIR__.'/../views', 'super-scan');
     }
 
     /**

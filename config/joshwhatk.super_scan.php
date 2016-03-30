@@ -4,7 +4,7 @@
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    0.0.4
+ * @version    1.0.0
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
@@ -12,10 +12,41 @@
 
 return [
 
-    'account_information' => [
-        'relations' => [
-            'servers',
-            'websites',
+    'account' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default Account
+        |--------------------------------------------------------------------------
+        |
+        | This account information is saved to the database during the super-scan
+        | migrations. If you are not using the default
+        | JoshWhatK\SuperScan\Database\Account model, then this can be removed.
+        |
+        */
+
+        'defaults' => [
+            [
+                'name' => 'Base Account',
+                'server_name' => 'hostname',
+                'ip_address' => '127.0.0.1',
+                'scan_directory' => '/var/www/html',
+                'public_url' => 'https://www.example.com',
+                'excluded_directories' => [
+                    'logs', 'cache'
+                ],
+            ],
+        ],
+    ],
+
+    'reporting' => [
+        'recipients' => [
+            'email@example.com',
+            'email@example.com',
+        ],
+        'from' => [
+            'name' => 'SuperScan',
+            'email' => 'report@example.com',
         ],
     ],
 
@@ -49,7 +80,7 @@ return [
             |
             */
 
-            'blacklist' => ['ftpquota', 'txt', 'swf', 'fla'],
+            'blacklist' => ['ftpquota', 'txt', 'swf', 'fla', 'log', 'lock'],
 
             /*
             |--------------------------------------------------------------------------
@@ -68,7 +99,7 @@ return [
 
         'directories' => [
 
-            'blacklist' => ['protected', 'private', '.git'],
+            'blacklist' => ['protected', 'private', '.git', 'vendor', 'framework'],
         ],
     ],
 
