@@ -457,7 +457,7 @@ class Scan
         return strtolower(pathinfo($this->current_file->getRealPath(), PATHINFO_EXTENSION));
     }
 
-    protected function log($message)
+    public function log($message)
     {
         if ($this->environment === 'local') {
             Log::info($message);
