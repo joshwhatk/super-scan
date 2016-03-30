@@ -1,5 +1,7 @@
 <?php
 
+namespace JoshWhatK\SuperScan\Database;
+
 /**
  * Part of the SuperScan package.
  *
@@ -9,8 +11,6 @@
  * @license    MIT
  * @link       http://jwk.me
  */
-
-namespace JoshWhatK\SuperScan\Database;
 
 use Illuminate\Database\Eloquent\Model;
 use JoshWhatK\SuperScan\Contracts\AccountInterface;

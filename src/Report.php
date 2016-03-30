@@ -1,5 +1,7 @@
 <?php
 
+namespace JoshWhatK\SuperScan;
+
 /**
  * Part of the SuperScan package.
  *
@@ -9,8 +11,6 @@
  * @license    MIT
  * @link       http://jwk.me
  */
-
-namespace JoshWhatK\SuperScan;
 
 use Illuminate\Support\Facades\Mail;
 use JoshWhatK\SuperScan\Contracts\ReportingInterface;
