@@ -251,19 +251,19 @@
         <th>
           <h3>Account</h3>
           <p>
-            <strong>Name:</strong> Something
+            <strong>Name:</strong> {{ $account->getName() }}
           </p>
           <p>
-            <strong>Server Hostname:</strong> Something
+            <strong>Server Hostname:</strong> {{ $account->getServerName() }}
           </p>
           <p>
-            <strong>IP Address:</strong> Something
+            <strong>IP Address:</strong> {{ $account->getIpAddress() }}
           </p>
           <p>
-            <strong>Directory Scanned:</strong> Something
+            <strong>Directory Scanned:</strong> {{ $account->getScanDirectory() }}
           </p>
           <p>
-            <strong>Web URL:</strong> Something
+            <strong>Web URL:</strong> {{ $account->getUrl() }}
           </p>
         </th>
         <th class="expander"></th>
