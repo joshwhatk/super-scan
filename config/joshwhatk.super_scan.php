@@ -39,6 +39,17 @@ return [
         ],
     ],
 
+    'reporting' => [
+        'recipients' => [
+            'email@example.com',
+            'email@example.com',
+        ],
+        'from' => [
+            'name' => 'SuperScan',
+            'email' => 'report@example.com',
+        ],
+    ],
+
     'defaults' => [
 
         'extensions' => [
