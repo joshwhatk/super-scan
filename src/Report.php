@@ -51,7 +51,7 @@ class Report implements ReportingInterface
         $added_files_text = $this->getFilesText($added);
         $deleted_files_text = $this->getFilesText($deleted);
 
-        Mail::send('super-scan.emails.report', compact(
+        Mail::send('super-scan::emails.report', compact(
             $account,
             $scan,
             $messages,
