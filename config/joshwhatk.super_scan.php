@@ -88,7 +88,7 @@ return [
 
         'directories' => [
 
-            'blacklist' => ['protected', 'private', '.git', 'vendor'],
+            'blacklist' => ['protected', 'private', '.git', 'vendor', 'framework'],
         ],
     ],
 
