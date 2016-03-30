@@ -80,7 +80,7 @@ return [
             |
             */
 
-            'blacklist' => ['ftpquota', 'txt', 'swf', 'fla'],
+            'blacklist' => ['ftpquota', 'txt', 'swf', 'fla', 'log'],
 
             /*
             |--------------------------------------------------------------------------
