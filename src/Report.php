@@ -12,6 +12,7 @@
 
 namespace JoshWhatK\SuperScan;
 
+use Illuminate\Support\Facades\Mail;
 use JoshWhatK\SuperScan\Contracts\ReportingInterface;
 
 class Report implements ReportingInterface
