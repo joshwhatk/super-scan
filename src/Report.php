@@ -51,17 +51,18 @@ class Report implements ReportingInterface
         $added_files_text = $this->getFilesText($added);
         $deleted_files_text = $this->getFilesText($deleted);
 
-        Mail::send('super-scan::emails.report', compact(
-            $account,
-            $scan,
-            $messages,
-            $added,
-            $altered,
-            $deleted,
-            $altered_files_text,
-            $added_files_text,
-            $deleted_files_text), function ($m)
-        {
+        Mail::send('super-scan::emails.report',
+        [
+            'account' => $account,
+            'scan' => $scan,
+            'messages' => $messages,
+            'added' => $added,
+            'altered' => $altered,
+            'deleted' => $deleted,
+            'altered_files_text' => $altered_files_text,
+            'added_files_text' => $added_files_text,
+            'deleted_files_text' => $deleted_files_text
+        ], function ($m) {
             $m->from(config('joshwhatk.super-scan.reporting.from.email'), config('joshwhatk.super-scan.reporting.from.name'));
 
             $m->to(config('joshwhatk.super-scan.reporting.recipients'))->subject('SuperScan Report');
