@@ -28,7 +28,7 @@ class File implements ArrayAccess
         {
             $this->path = $file->path;
             $this->hash = $file->hash;
-            $this->last_modified = new Carbon($file->last_modified);
+            $this->last_modified = $file->last_modified;
 
             return $this;
         }

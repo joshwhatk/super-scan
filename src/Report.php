@@ -12,6 +12,7 @@ namespace JoshWhatK\SuperScan;
  * @link       http://jwk.me
  */
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use JoshWhatK\SuperScan\Contracts\ReportingInterface;
 
@@ -45,7 +46,11 @@ class Report implements ReportingInterface
         $messages = $this->messages;
         $added = $this->scan->added;
         $altered = $this->scan->altered;
-        $deleted = $this->scan->deleted;
+        $deleted = $this->scan->deleted->each(function($item)
+        {
+            $item->last_modified = new Carbon($item->last_modified);
+            return $item;
+        });
 
         $altered_files_text = $this->getFilesText($altered);
         $added_files_text = $this->getFilesText($added);
