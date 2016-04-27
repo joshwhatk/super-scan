@@ -6,7 +6,7 @@ namespace JoshWhatK\SuperScan\Support;
  * Part of the SuperScan package.
  *
  * @package    SuperScan
- * @version    1.0.1
+ * @version    1.0.2
  * @author     joshwhatk
  * @license    MIT
  * @link       http://jwk.me
