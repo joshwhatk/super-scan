@@ -1,10 +1,9 @@
 {
     "name": "joshwhatk/super-scan",
-    "description": "Simple file change detection",
+    "description": "Simple File Change Detection for Laravel",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
-        "barryvdh/laravel-debugbar": "^2.0"
+        "laravel/framework": "5.2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -12,7 +11,8 @@
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1",
         "symfony/dom-crawler": "~3.0",
-        "symfony/css-selector": "~3.0"
+        "symfony/css-selector": "~3.0",
+        "barryvdh/laravel-debugbar": "^2.0"
     },
     "autoload": {
         "psr-4": {
