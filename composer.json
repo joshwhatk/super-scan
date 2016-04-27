@@ -1,6 +1,6 @@
 {
     "name": "joshwhatk/super-scan",
-    "description": "Simple file change detection",
+    "description": "Simple File Change Detection for Laravel",
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
