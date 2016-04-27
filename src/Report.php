@@ -46,7 +46,7 @@ class Report implements ReportingInterface
         $messages = $this->messages;
         $added = $this->scan->added;
         $altered = $this->scan->altered;
-        $deleted = $this->scan->deleted->each(function($item)
+        $deleted = $this->scan->deleted->map(function($item)
         {
             $item->last_modified = new Carbon($item->last_modified);
             return $item;
